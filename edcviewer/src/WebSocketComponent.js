@@ -14,11 +14,11 @@ const WebSocketComponent = () => {
     };
 
     socket.onmessage = (event) => {
-      
-      const imageData = event.data; 
+
+      const imageData = event.data;
 
       // transfer the data to image
-      const imageBlob = new Blob([imageData], { type: 'image/jpeg' }); 
+      const imageBlob = new Blob([imageData], { type: 'image/jpeg' });
       const imageObjectURL = URL.createObjectURL(imageBlob);
 
       const img = new Image();
@@ -27,7 +27,7 @@ const WebSocketComponent = () => {
       img.onload = () => {
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(img, 0, 0, canvas.width, canvas.height);
-        URL.revokeObjectURL(imageObjectURL); 
+        URL.revokeObjectURL(imageObjectURL);
       };
     };
 
