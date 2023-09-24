@@ -11,7 +11,8 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4",
     "websocket": "^1.0.34",
-    "ws": "^8.14.1"
+    "ws": "^8.14.1",
+    "antd": "5.9.2"
   },
   "scripts": {
     "start": "react-scripts start",
