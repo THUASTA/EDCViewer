@@ -23,7 +23,7 @@
 .player-info-attr-row {
     display: flex;
     justify-content: space-between;
-    gap:20px;
+    gap: 20px;
 }
 
 .player-info-attr-container {
