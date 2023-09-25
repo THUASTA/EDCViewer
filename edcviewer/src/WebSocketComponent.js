@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-const WebSocketComponentV2 = () => {
+const WebSocketComponent = () => {
   const canvasLeftRef = useRef(null);
   const canvasRightRef = useRef(null);
   useEffect(() => {
@@ -59,4 +59,4 @@ const WebSocketComponentV2 = () => {
   );
 };
 
-export default WebSocketComponentV2;
+export default WebSocketComponent;
