@@ -3,14 +3,14 @@
 const WebSocket = require('ws');
 const http = require('http');
 const fs = require('fs');
-const { TIMEOUT } = require('dns');
+const {TIMEOUT} = require('dns');
 
 const server = http.createServer(
-  (req, res) => {
-    // handle http request here
-  });
+    (req, res) => {
+        // handle http request here
+    });
 
-const wss = new WebSocket.Server({ server });
+const wss = new WebSocket.Server({server});
 
 wss.on('connection', (ws) => {
   // read the picture (change the path to yours)
@@ -27,9 +27,8 @@ wss.on('connection', (ws) => {
       frameData: Buffer.from(imageData).toString('base64'),
       width: width,
       height: height
-    }
-    // send to client
-    ws.send(JSON.stringify(imageDataObject));
+    }  // send to client
+                            ws.send(JSON.stringify(imageDataObject));
   });
 });
 

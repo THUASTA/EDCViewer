@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, {useEffect, useRef} from 'react';
 
 const WebSocketComponent = () => {
   const canvasLeftRef = useRef(null);
@@ -53,8 +53,8 @@ const WebSocketComponent = () => {
   return (
     <div>
       WebSocket图像
-      <div><canvas ref={canvasLeftRef} width={"100%"} height={"100%"} /></div>
-      <div><canvas ref={canvasRightRef} width={"100%"} height={"100%"} /></div>
+      <div><canvas ref={canvasLeftRef} width={'100%'} height={'100%'} /></div>
+      <div><canvas ref={canvasRightRef} width={'100%'} height={'100%'} /></div>
     </div>
   );
 };
