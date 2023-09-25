@@ -1,15 +1,16 @@
-import React, { useEffect } from 'react';
 import './InventoryItem'
 import './PlayerInfo.css'
 import './utils.css'
+
+import React, {useEffect} from 'react';
+
 import InventoryItem from './InventoryItem';
 
-const PlayerInfo = ({ playerId, health, maxHealth, agility, strength, emerald, wool }) => {
+const PlayerInfo =
+    ({playerId, health, maxHealth, agility, strength, emerald, wool}) => {
     return (
         <div class='player-info-container'>
-            <div class='player-info-label'>
-                Player {playerId}
-            </div>
+            <div class='player-info-label'> Player {playerId} </div>
             <div class='player-info-content-container'>
                 <div class='player-info-attr-row'>
                     <div class='player-info-attr-container'>
@@ -36,7 +37,7 @@ const PlayerInfo = ({ playerId, health, maxHealth, agility, strength, emerald, w
                 </div>
             </div>
         </div>
-    );
+    )
 }
 
 export default PlayerInfo;

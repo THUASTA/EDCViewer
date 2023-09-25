@@ -1,8 +1,11 @@
-import React, { Component } from 'react';
-import WebSocketComponent from './WebSocketComponent';
-import PlayerInfo from './PlayerInfo';
-import { Button } from 'antd';
 import './App.css'
+
+import {Button} from 'antd';
+import React, {Component} from 'react';
+
+import PlayerInfo from './PlayerInfo';
+import WebSocketComponent from './WebSocketComponent';
+
 class App extends Component {
   render() {
     return (
@@ -10,33 +13,17 @@ class App extends Component {
         <div class='top'>
           <div class='control-buttons-container'>
             <div class='control-buttons-row'>
-              <Button type="primary" size="large" block>Start</Button>
+              <Button type='primary' size='large' block>Start</Button>
               <Button size="large" block>Calibrate</Button>
             </div>
             <div class='control-buttons-row'>
               <Button size="large" block>End</Button>
-              <Button size="large" block>Settings</Button>
+              <Button size='large' block>Settings</Button>
             </div>
           </div>
           <div class='player-list-container'>
-            <PlayerInfo
-              playerId={1}
-              health={1}
-              maxHealth={20}
-              agility={10}
-              strength={10}
-              emerald={64}
-              wool={12}
-            />
-            <PlayerInfo
-              playerId={2}
-              health={3}
-              maxHealth={20}
-              agility={8}
-              strength={12}
-              emerald={1}
-              wool={40}
-            />
+            <PlayerInfo/>
+            <PlayerInfo/>
           </div>
         </div>
         <WebSocketComponent />

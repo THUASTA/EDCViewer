@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
 import './InventoryItem.css'
 
-const InventoryItem = ({ item, count }) => {
+import React, {useEffect} from 'react';
+
+const InventoryItem = ({item, count}) => {
     return (
         <div class='inventory-item-container'>
             <img
