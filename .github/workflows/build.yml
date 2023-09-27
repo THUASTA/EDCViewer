@@ -9,8 +9,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - run: |
-          sudo apt-get install -y clang-format
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
       - run: |
-          clang-format --dry-run --Werror $(find . -name '*.js')
+          npm install clang-format@1.8.0
+
+      - run: |
+          npx clang-format --dry-run --Werror $(find . -name '*.js')
