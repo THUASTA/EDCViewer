@@ -132,4 +132,5 @@ dist
 
 
 ## Project specific ignores
+/.vscode/
 /build/
