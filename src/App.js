@@ -4,9 +4,8 @@ import { Button } from 'antd';
 import React, { useEffect, useState } from 'react';
 
 import PlayerInfo from './PlayerInfo';
-import WebSocketComponent from './WebSocketComponent';
 import VideoStreamPlayer from './VideoStreamPlayer';
-
+import Grid from './Grid';
 const server = 'ws://localhost:8080'
 
 const App = () => {
@@ -96,7 +95,6 @@ const App = () => {
           />
           : <></>}
       </div>
-      {/* <WebSocketComponent /> */}
     </div>
   )
 }
