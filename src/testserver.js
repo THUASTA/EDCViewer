@@ -4,18 +4,18 @@
 const WebSocket = require('ws');
 const http = require('http');
 const fs = require('fs');
-const {TIMEOUT} = require('dns');
+const { TIMEOUT } = require('dns');
 
 const server = http.createServer(
-    (req, res) => {
-        // handle http request here
-    });
+  (req, res) => {
+    // handle http request here
+  });
 
-const wss = new WebSocket.Server({server});
+const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws) => {
   // read the picture (change the path to yours)
-  fs.readFile('pic.jpg', (err, imageData) => {
+  fs.readFile('public/assets/pic.jpg', (err, imageData) => {
     if (err) {
       console.error(err);
       return;
