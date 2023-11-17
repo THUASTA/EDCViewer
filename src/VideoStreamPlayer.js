@@ -25,9 +25,8 @@ const VideoStreamPlayer = ({ data, width, height }) => {
                 URL.revokeObjectURL(imageObjectURL);
             };
 
-            console.log(data);
         }
-        ,[data, width, height]
+        , [data, width, height]
     );
 
     return (

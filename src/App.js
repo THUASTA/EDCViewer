@@ -37,7 +37,14 @@ const App = () => {
       ws.onclose = () => {
         console.log('WebSocket disconnected');
       };
-
+      const start = document.getElementById("startbutton");
+      const end = document.getElementById("endbutton");
+      start.onclick = () => {
+        ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "START", token: "114514" }));
+      }
+      end.onclick = () => {
+        ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "END", token: "1919810" }));
+      }
       return () => {
         ws.close(); // close the WebSocket connection when the component is unmounted
       };
@@ -50,11 +57,11 @@ const App = () => {
       <div class='top'>
         <div class='control-buttons-container'>
           <div class='control-buttons-row'>
-            <Button type='primary' size='large' block>Start</Button>
+            <Button type='primary' size='large' block id="startbutton">Start</Button>
             <Button size="large" block>Calibrate</Button>
           </div>
           <div class='control-buttons-row'>
-            <Button size="large" block>End</Button>
+            <Button size="large" block id="endbutton">End</Button>
             <Button size='large' block>Settings</Button>
           </div>
         </div>
