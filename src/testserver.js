@@ -45,6 +45,10 @@ wss.on('connection', (ws) => {
 
     ws.send(JSON.stringify(data));
   });
+  ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    console.log(data);
+  };
 });
 
 server.listen(8080, () => {
