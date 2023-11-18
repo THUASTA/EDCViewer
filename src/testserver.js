@@ -15,7 +15,7 @@ const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws) => {
   // read the picture (change the path to yours)
-  fs.readFile('public/assets/pic.jpg', (err, imageData) => {
+  fs.readFile('../public/assets/pic.jpg', (err, imageData) => {
     if (err) {
       console.error(err);
       return;
