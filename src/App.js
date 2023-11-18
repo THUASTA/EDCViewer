@@ -14,7 +14,204 @@ const App = () => {
   const [camera2, setCamera2] = useState(null);
   const [player1, setPlayer1] = useState(null);
   const [player2, setPlayer2] = useState(null);
+  var coord1 = [];
+  var coord2 = [];
+  var calibrated1 = false;
+  var calibrated2 = false;
+  var message = true;
+  function data1() {
+    const inputs = document.getElementsByClassName("color-value");
+    const hueCenter1 = inputs[0].value;
+    const hueRange1 = inputs[1].value;
+    const saturationCenter1 = inputs[2].value;
+    const saturationRange1 = inputs[3].value;
+    const valueCenter1 = inputs[4].value;
+    const valueRange1 = inputs[5].value;
+    const hueCenter2 = inputs[6].value;
+    const hueRange2 = inputs[7].value;
+    const saturationCenter2 = inputs[8].value;
+    const saturationRange2 = inputs[9].value;
+    const valueCenter2 = inputs[10].value;
+    const valueRange2 = inputs[11].value;
+    const areas = document.getElementsByClassName("area");
+    const area1 = areas[0].value;
+    const area2 = areas[1].value;
+    const cameras = document.getElementsByClassName("camera-select");
+    const camera1 = Number(cameras[0].value);
+    const camera2 = Number(cameras[1].value);
+    const ports = document.getElementsByClassName("port-select");
+    const port1 = ports[0].value;
+    const port2 = ports[1].value;
+    const masks = document.getElementsByClassName("show-mask");
+    const mask1 = masks[0].checked;
+    const mask2 = masks[1].checked;
+    const baud = document.getElementsByClassName("baudRate");
+    const baudrate1 = Number(baud[0].value);
+    const baudrate2 = Number(baud[1].value);
+    const data1 = {
+      messageType: "HOST_CONFIGURATION_FROM_CLIENT",
+      token: "",
+      players: [
+        {
+          playerId: 0,
+          camera: {
+            cameraId: camera1,
+            recognition: {
+              hueCenter: hueCenter1,
+              hueRange: hueRange1,
+              saturationCenter: saturationCenter1,
+              saturationRange: saturationRange1,
+              valueCenter: valueCenter1,
+              valueRange: valueRange1,
+              minArea: area1,
+              showMask: mask1
+            }
+          },
+          serialPort: {
+            port: port1,
+            baudrate: baudrate1
+          }
+        },
+        {
+          playerId: 1,
+          camera: {
+            cameraId: camera2,
+            recognition: {
+              hueCenter: hueCenter2,
+              hueRange: hueRange2,
+              saturationCenter: saturationCenter2,
+              saturationRange: saturationRange2,
+              valueCenter: valueCenter2,
+              valueRange: valueRange2,
+              minArea: area2,
+              showMask: mask2
+            }
+          },
+          serialPort: {
+            port: port2,
+            baudrate: baudrate2
+          }
 
+        }
+      ]
+    }
+    return data1;
+  }
+  function data2() {
+    const inputs = document.getElementsByClassName("color-value");
+    const hueCenter1 = inputs[0].value;
+    const hueRange1 = inputs[1].value;
+    const saturationCenter1 = inputs[2].value;
+    const saturationRange1 = inputs[3].value;
+    const valueCenter1 = inputs[4].value;
+    const valueRange1 = inputs[5].value;
+    const hueCenter2 = inputs[6].value;
+    const hueRange2 = inputs[7].value;
+    const saturationCenter2 = inputs[8].value;
+    const saturationRange2 = inputs[9].value;
+    const valueCenter2 = inputs[10].value;
+    const valueRange2 = inputs[11].value;
+    const areas = document.getElementsByClassName("area");
+    const area1 = areas[0].value;
+    const area2 = areas[1].value;
+    const cameras = document.getElementsByClassName("camera-select");
+    const camera1 = Number(cameras[0].value);
+    const camera2 = Number(cameras[1].value);
+    const ports = document.getElementsByClassName("port-select");
+    const port1 = ports[0].value;
+    const port2 = ports[1].value;
+    const masks = document.getElementsByClassName("show-mask");
+    const mask1 = masks[0].checked;
+    const mask2 = masks[1].checked;
+    const baud = document.getElementsByClassName("baudRate");
+    const baudrate1 = Number(baud[0].value);
+    const baudrate2 = Number(baud[1].value);
+    const corner1 = coord1;
+    const corner2 = coord2;
+    const data2 = {
+      messageType: "HOST_CONFIGURATION_FROM_CLIENT",
+      token: "",
+      players: [
+        {
+          playerId: 0,
+          camera: {
+            cameraId: camera1,
+            calibration: {
+              topLeft: {
+                x: corner1[0][0],
+                y: corner1[0][1]
+              },
+              topRight: {
+                x: corner1[1][0],
+                y: corner1[1][1]
+              },
+              bottomLeft: {
+                x: corner1[3][0],
+                y: corner1[3][1]
+              },
+              bottomRight: {
+                x: corner1[2][0],
+                y: corner1[2][1]
+              }
+            },
+            recognition: {
+              hueCenter: hueCenter1,
+              hueRange: hueRange1,
+              saturationCenter: saturationCenter1,
+              saturationRange: saturationRange1,
+              valueCenter: valueCenter1,
+              valueRange: valueRange1,
+              minArea: area1,
+              showMask: mask1
+            }
+          },
+          serialPort: {
+            port: port1,
+            baudrate: baudrate1
+          }
+        },
+        {
+          playerId: 1,
+          camera: {
+            cameraId: camera2,
+            calibration: {
+              topLeft: {
+                x: corner2[0][0],
+                y: corner2[0][1]
+              },
+              topRight: {
+                x: corner2[1][0],
+                y: corner2[1][1]
+              },
+              bottomLeft: {
+                x: corner2[3][0],
+                y: corner2[3][1]
+              },
+              bottomRight: {
+                x: corner2[2][0],
+                y: corner2[2][1]
+              }
+            },
+            recognition: {
+              hueCenter: hueCenter2,
+              hueRange: hueRange2,
+              saturationCenter: saturationCenter2,
+              saturationRange: saturationRange2,
+              valueCenter: valueCenter2,
+              valueRange: valueRange2,
+              minArea: area2,
+              showMask: mask2
+            }
+          },
+          serialPort: {
+            port: port2,
+            baudrate: baudrate2
+          }
+        }
+      ]
+    }
+    return data2;
+  }
   useEffect(
     () => {
       const ws = new WebSocket(server);
@@ -40,11 +237,37 @@ const App = () => {
       };
       const start = document.getElementById("startbutton");
       const end = document.getElementById("endbutton");
+      const setting = document.getElementById("setting");
+      const canvas = document.getElementById("canvas");
+      setting.onclick = async () => {
+        setTimeout(() => {
+          const confirm = document.getElementById("confirmbutton");
+          confirm.onclick = () => {
+            if (calibrated1 && calibrated2) {
+              ws.send(JSON.stringify(data2()));
+              console.log('send data2');
+            }
+            else {
+              ws.send(JSON.stringify(data1()));
+              console.log('send data1');
+            }
+          }
+        }, 1000)
+
+      }
+
       start.onclick = () => {
-        ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "START", token: "114514" }));
+        ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "START", token: "" }));
       }
       end.onclick = () => {
-        ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "END", token: "1919810" }));
+        ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "END", token: "" }));
+      }
+      canvas.onclick = () => {
+        if (calibrated1 && calibrated2 && message) {
+          ws.send(JSON.stringify(data2()));
+          message = false;
+          console.log('send data2');
+        }
       }
       return () => {
         ws.close(); // close the WebSocket connection when the component is unmounted
@@ -54,17 +277,24 @@ const App = () => {
   );
 
   const [calibrating, setCalibrating] = useState(false);
-
-  // callback functions called when calibration finishes
-  const finishCalibrate1 = () => {
+  const finishCalibrate1 = (corner) => {
     setCalibrating(false);
     console.log('camera1 calibrated');
+    for (let i = 0; i < 4; i++) {
+      coord1[i] = corner[i];
+    }
+    calibrated1 = true;
+    console.log(calibrated1)
     // send messages
   }
 
-  const finishCalibrate2 = () => {
+  const finishCalibrate2 = (corner) => {
     setCalibrating(false);
     console.log('camera2 calibrated');
+    for (let i = 0; i < 4; i++) {
+      coord2[i] = corner[i];
+    }
+    calibrated2 = true;
     // send messages
   }
 
@@ -75,12 +305,13 @@ const App = () => {
           <div class='control-buttons-row'>
             <Button type='primary' size='large' id="startbutton" block>Start</Button>
             <Button size="large" block
-              onClick={() => setCalibrating(true)}
+              onClick={() => { setCalibrating(true); calibrated1 = false; calibrated2 = false }}
             >Calibrate</Button>
           </div>
           <div class='control-buttons-row'>
             <Button size="large" id="endbutton" block>End</Button>
             <Popover
+              id="popover"
               placement="bottomLeft"
               arrow={false}
               trigger="click"
@@ -90,11 +321,11 @@ const App = () => {
                     <SettingsItem title='Player 1' />
                     <SettingsItem title='Player 2' />
                   </div>
-                  <Button>Confirm</Button>
+                  <Button id="confirmbutton">Confirm</Button>
                 </div>
               )}
             >
-              <Button size='large' block>Settings</Button>
+              <Button size='large' block id="setting">Settings</Button>
             </Popover>
           </div>
         </div>
@@ -119,7 +350,7 @@ const App = () => {
           />
         </div>
       </div>
-      <div class='flex'>
+      <div class='flex' id="canvas">
         <div class='video-canvas-container'>
           <div class='video-stream-player'>
             {camera1 ?
