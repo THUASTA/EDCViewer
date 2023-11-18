@@ -6,10 +6,11 @@ const SettingsItem = ({ title }) => {
     const [hue, setHue] = useState({ center: undefined, range: undefined });
     const [saturation, setSatuarion] = useState({ center: undefined, range: undefined });
     const [value, setValue] = useState({ center: undefined, range: undefined });
+    const [minArea, setMinArea] = useState(undefined);
     const [camera, SetCamera] = useState('0');
     const [port, setPort] = useState('COM9');
     const [showMask, setShowMask] = useState(false);
-
+    const [baudRate, setBaudRate] = useState('115200');
     return (
 
         <div class='settings-container'>
@@ -55,9 +56,18 @@ const SettingsItem = ({ title }) => {
                     </div>
                 </div>
                 <div class='settings-item'>
+                    <span class='settings-item-label'>Min-Area</span>
+                    <div class='settings-item-value-container'>
+                        <input type='number' class='area' placeholder='min-area'
+                            value={minArea}
+                            onChange={(e) => setMinArea(e.target.value)}
+                        />
+                    </div>
+                </div>
+                <div class='settings-item'>
                     <span class='settings-item-label'>Camera</span>
                     <div class='settings-item-value-container'>
-                        <select
+                        <select class='camera-select'
                             value={camera}
                             onChange={(e) => SetCamera(e.target.value)}
                         >
@@ -69,7 +79,7 @@ const SettingsItem = ({ title }) => {
                 <div class='settings-item'>
                     <span class='settings-item-label'>Port</span>
                     <div class='settings-item-value-container'>
-                        <select
+                        <select class='port-select'
                             value={port}
                             onChange={(e) => setPort(e.target.value)}
                         >
@@ -80,10 +90,27 @@ const SettingsItem = ({ title }) => {
                 <div class='settings-item'>
                     <span class='settings-item-label'>Show Mask</span>
                     <div class='settings-item-value-container'>
-                        <input type='checkbox'
+                        <input type='checkbox' class='show-mask'
                             value={showMask}
                             onChange={(e) => setShowMask(e.target.value)}
                         />
+                    </div>
+                </div>
+                <div class='settings-item'>
+                    <span class='settings-item-label'>Port</span>
+                    <div class='settings-item-value-container'>
+                        <select class='baudRate'
+                            value={baudRate}
+                            onChange={(e) => setBaudRate(e.target.value)}
+                        >
+                            <option>2400</option>
+                            <option>4800</option>
+                            <option>9600</option>
+                            <option>19200</option>
+                            <option>38400</option>
+                            <option>57600</option>
+                            <option>115200</option>
+                        </select>
                     </div>
                 </div>
             </div>

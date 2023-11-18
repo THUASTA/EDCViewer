@@ -20,7 +20,7 @@ class Canvas {
                 this.draw_corner(x, y);
                 this.clicktimes++;
                 if (this.clicktimes === 4) {
-                    callback();
+                    callback(this.corner)
                 }
             }
         });
@@ -28,11 +28,13 @@ class Canvas {
         this.imageArray = imageArray;
         this.indexArray = indexArray;
         //document.body.appendChild(this.canvas);
-        
+
         this.corner = [];
 
     }
-
+    state = {
+        corner: this.corner,
+    }
     startCalibrate() {
         this.clicktimes = 0;
     }
@@ -247,7 +249,18 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback }) => {
     let indexArray = [];
 
     const gridCanvas = useRef(null);
-
+    const tmpload = () => {
+        loadNum += 1;
+        if (loadNum === imageNum) {
+            gridCanvas.current = new Canvas(
+                canvasRef.current,
+                width, width, 'c1',
+                num,
+                imageArray, indexArray,
+                finishCalibrateCallback
+            );
+        }
+    }
     useEffect(
         () => {
             for (let i = 0; i < 81; i++) {
@@ -256,19 +269,7 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback }) => {
             for (let i = 0; i < imageNum; i++) {
                 let temp = new Image();
                 temp.src = srcArray[i];
-
-                temp.onload = function () {
-                    loadNum += 1;
-                    if (loadNum === imageNum) {
-                        gridCanvas.current = new Canvas(
-                            canvasRef.current,
-                            width, width, 'c1',
-                            num,
-                            imageArray, indexArray,
-                            finishCalibrateCallback
-                        );
-                    }
-                }
+                temp.onload = tmpload;
                 imageArray.push(temp);
             }
         },
