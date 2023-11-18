@@ -24,7 +24,6 @@ const VideoStreamPlayer = ({ data, width, height }) => {
                 context.drawImage(img, 0, 0, canvas.width, canvas.height);
                 URL.revokeObjectURL(imageObjectURL);
             };
-
         }
         , [data, width, height]
     );
