@@ -73,3 +73,20 @@
   display: flex;
   justify-content: space-between;
 }
+
+.video-canvas-container {
+  position: relative;
+  width: 50%;
+}
+
+.video-stream-player {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.grid-canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+}

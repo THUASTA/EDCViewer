@@ -1,11 +1,12 @@
 import './App.css'
 
-import { Button } from 'antd';
+import { Button, Popover } from 'antd';
 import React, { useEffect, useState } from 'react';
 
 import PlayerInfo from './PlayerInfo';
 import VideoStreamPlayer from './VideoStreamPlayer';
-import Grid from './Grid';
+import SettingsItem from './SettingsItem';
+import GridCanvas from './GridCanvas';
 const server = 'ws://localhost:8080'
 
 const App = () => {
@@ -45,17 +46,49 @@ const App = () => {
     []
   );
 
+  const [calibrating, setCalibrating] = useState(false);
+
+  // callback functions called when calibration finishes
+  const finishCalibrate1 = () => {
+    setCalibrating(false);
+    console.log('camera1 calibrated');
+    // send messages
+  }
+
+  const finishCalibrate2 = () => {
+    setCalibrating(false);
+    console.log('camera2 calibrated');
+    // send messages
+  }
+
   return (
     <div class='app-container'>
       <div class='top'>
         <div class='control-buttons-container'>
           <div class='control-buttons-row'>
             <Button type='primary' size='large' block>Start</Button>
-            <Button size="large" block>Calibrate</Button>
+            <Button size="large" block
+              onClick={() => setCalibrating(true)}
+            >Calibrate</Button>
           </div>
           <div class='control-buttons-row'>
             <Button size="large" block>End</Button>
-            <Button size='large' block>Settings</Button>
+            <Popover
+              placement="bottomLeft"
+              arrow={false}
+              trigger="click"
+              content={(
+                <div>
+                  <div class='flex'>
+                    <SettingsItem title='Player 1' />
+                    <SettingsItem title='Player 2' />
+                  </div>
+                  <Button>Confirm</Button>
+                </div>
+              )}
+            >
+              <Button size='large' block>Settings</Button>
+            </Popover>
           </div>
         </div>
         <div class='player-list-container'>
@@ -80,20 +113,36 @@ const App = () => {
         </div>
       </div>
       <div class='flex'>
-        {camera1 ?
-          <VideoStreamPlayer
-            data={camera1.frameData}
-            width={camera1.width}
-            height={camera1.height}
-          />
-          : <></>}
-        {camera2 ?
-          <VideoStreamPlayer
-            data={camera2.frameData}
-            width={camera2.width}
-            height={camera2.height}
-          />
-          : <></>}
+        <div class='video-canvas-container'>
+          <div class='video-stream-player'>
+            {camera1 ?
+              <VideoStreamPlayer
+                data={camera1.frameData}
+                width={camera1.width}
+                height={camera1.height}
+              />
+              : <></>}
+          </div>
+          <div class='grid-canvas'>
+            <GridCanvas
+              calibrating={calibrating} finishCalibrateCallback={finishCalibrate1} />
+          </div>
+        </div>
+        <div class='video-canvas-container'>
+          <div class='video-stream-player'>
+            {camera2 ?
+              <VideoStreamPlayer
+                data={camera2.frameData}
+                width={camera2.width}
+                height={camera2.height}
+              />
+              : <></>}
+          </div>
+          <div class='grid-canvas'>
+            <GridCanvas
+              calibrating={calibrating} finishCalibrateCallback={finishCalibrate2} />
+          </div>
+        </div>
       </div>
     </div>
   )
