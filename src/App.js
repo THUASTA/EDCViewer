@@ -20,7 +20,7 @@ const App = () => {
   var calibrated2 = false;
   var message = true;
   function nullOrDefault(inputValue, defaultValue) {
-    if (inputValue === null || inputValue === undefined) {
+    if (inputValue === null || inputValue === undefined || isNaN(inputValue)) {
       return defaultValue;
     }
     else return inputValue;
@@ -28,6 +28,8 @@ const App = () => {
   function data1() {
     try {
       const inputs = document.getElementsByClassName("color-value");
+      console.log(parseInt(inputs[0].value));
+      console.log(nullOrDefault(parseInt(inputs[0].value), 0));
       const hueCenter1 = nullOrDefault(parseInt(inputs[0].value), 0);
       const hueRange1 = nullOrDefault(parseInt(inputs[1].value), 0);
       const saturationCenter1 = nullOrDefault(parseInt(inputs[2].value), 0);
@@ -49,6 +51,7 @@ const App = () => {
       const ports = document.getElementsByClassName("port-select");
       const port1 = ports[0].value;
       const port2 = ports[1].value;
+      // console.log(port1);
       const masks = document.getElementsByClassName("show-mask");
       const mask1 = masks[0].checked;
       const mask2 = masks[1].checked;
