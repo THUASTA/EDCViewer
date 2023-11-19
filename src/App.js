@@ -20,7 +20,7 @@ const App = () => {
   var calibrated2 = false;
   var message = true;
   function nullOrDefault(inputValue, defaultValue) {
-    if (input === null || input === undefined) {
+    if (inputValue === null || inputValue === undefined) {
       return defaultValue;
     }
     else return inputValue;
