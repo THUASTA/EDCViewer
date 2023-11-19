@@ -20,82 +20,87 @@ const App = () => {
   var calibrated2 = false;
   var message = true;
   function data1() {
-    const inputs = document.getElementsByClassName("color-value");
-    const hueCenter1 = inputs[0].value;
-    const hueRange1 = inputs[1].value;
-    const saturationCenter1 = inputs[2].value;
-    const saturationRange1 = inputs[3].value;
-    const valueCenter1 = inputs[4].value;
-    const valueRange1 = inputs[5].value;
-    const hueCenter2 = inputs[6].value;
-    const hueRange2 = inputs[7].value;
-    const saturationCenter2 = inputs[8].value;
-    const saturationRange2 = inputs[9].value;
-    const valueCenter2 = inputs[10].value;
-    const valueRange2 = inputs[11].value;
-    const areas = document.getElementsByClassName("area");
-    const area1 = areas[0].value;
-    const area2 = areas[1].value;
-    const cameras = document.getElementsByClassName("camera-select");
-    const camera1 = Number(cameras[0].value);
-    const camera2 = Number(cameras[1].value);
-    const ports = document.getElementsByClassName("port-select");
-    const port1 = ports[0].value;
-    const port2 = ports[1].value;
-    const masks = document.getElementsByClassName("show-mask");
-    const mask1 = masks[0].checked;
-    const mask2 = masks[1].checked;
-    const baud = document.getElementsByClassName("baudRate");
-    const baudrate1 = Number(baud[0].value);
-    const baudrate2 = Number(baud[1].value);
-    const data1 = {
-      messageType: "HOST_CONFIGURATION_FROM_CLIENT",
-      token: "",
-      players: [
-        {
-          playerId: 0,
-          camera: {
-            cameraId: camera1,
-            recognition: {
-              hueCenter: hueCenter1,
-              hueRange: hueRange1,
-              saturationCenter: saturationCenter1,
-              saturationRange: saturationRange1,
-              valueCenter: valueCenter1,
-              valueRange: valueRange1,
-              minArea: area1,
-              showMask: mask1
+    try {
+      const inputs = document.getElementsByClassName("color-value");
+      const hueCenter1 = parseInt(inputs[0].value);
+      const hueRange1 = parseInt(inputs[1].value);
+      const saturationCenter1 = parseInt(inputs[2].value);
+      const saturationRange1 = parseInt(inputs[3].value);
+      const valueCenter1 = parseInt(inputs[4].value);
+      const valueRange1 = parseInt(inputs[5].value);
+      const hueCenter2 = parseInt(inputs[6].value);
+      const hueRange2 = parseInt(inputs[7].value);
+      const saturationCenter2 = parseInt(inputs[8].value);
+      const saturationRange2 = parseInt(inputs[9].value);
+      const valueCenter2 = parseInt(inputs[10].value);
+      const valueRange2 = parseInt(inputs[11].value);
+      const areas = document.getElementsByClassName("area");
+      const area1 = parseInt(areas[0].value);
+      const area2 = parseInt(areas[1].value);
+      const cameras = document.getElementsByClassName("camera-select");
+      const camera1 = Number(cameras[0].value);
+      const camera2 = Number(cameras[1].value);
+      const ports = document.getElementsByClassName("port-select");
+      const port1 = ports[0].value;
+      const port2 = ports[1].value;
+      const masks = document.getElementsByClassName("show-mask");
+      const mask1 = masks[0].checked;
+      const mask2 = masks[1].checked;
+      const baud = document.getElementsByClassName("baudRate");
+      const baudrate1 = Number(baud[0].value);
+      const baudrate2 = Number(baud[1].value);
+      const data1 = {
+        messageType: "HOST_CONFIGURATION_FROM_CLIENT",
+        token: "",
+        players: [
+          {
+            playerId: 0,
+            camera: {
+              cameraId: camera1,
+              recognition: {
+                hueCenter: hueCenter1,
+                hueRange: hueRange1,
+                saturationCenter: saturationCenter1,
+                saturationRange: saturationRange1,
+                valueCenter: valueCenter1,
+                valueRange: valueRange1,
+                minArea: area1,
+                showMask: mask1
+              }
+            },
+            serialPort: {
+              port: port1,
+              baudrate: baudrate1
             }
           },
-          serialPort: {
-            port: port1,
-            baudrate: baudrate1
-          }
-        },
-        {
-          playerId: 1,
-          camera: {
-            cameraId: camera2,
-            recognition: {
-              hueCenter: hueCenter2,
-              hueRange: hueRange2,
-              saturationCenter: saturationCenter2,
-              saturationRange: saturationRange2,
-              valueCenter: valueCenter2,
-              valueRange: valueRange2,
-              minArea: area2,
-              showMask: mask2
+          {
+            playerId: 1,
+            camera: {
+              cameraId: camera2,
+              recognition: {
+                hueCenter: hueCenter2,
+                hueRange: hueRange2,
+                saturationCenter: saturationCenter2,
+                saturationRange: saturationRange2,
+                valueCenter: valueCenter2,
+                valueRange: valueRange2,
+                minArea: area2,
+                showMask: mask2
+              }
+            },
+            serialPort: {
+              port: port2,
+              baudrate: baudrate2
             }
-          },
-          serialPort: {
-            port: port2,
-            baudrate: baudrate2
-          }
 
-        }
-      ]
+          }
+        ]
+      }
+      return data1;
     }
-    return data1;
+    catch {
+      return null;
+    }
   }
   function data2() {
     const inputs = document.getElementsByClassName("color-value");
