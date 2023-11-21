@@ -113,120 +113,126 @@ const App = () => {
     }
   }
   function data2() {
-    const inputs = document.getElementsByClassName("color-value");
-    const hueCenter1 = nullOrDefault(parseInt(inputs[0].value), 0);
-    const hueRange1 = nullOrDefault(parseInt(inputs[1].value), 0);
-    const saturationCenter1 = nullOrDefault(parseInt(inputs[2].value), 0);
-    const saturationRange1 = nullOrDefault(parseInt(inputs[3].value), 0);
-    const valueCenter1 = nullOrDefault(parseInt(inputs[4].value), 0);
-    const valueRange1 = nullOrDefault(parseInt(inputs[5].value), 0);
-    const hueCenter2 = nullOrDefault(parseInt(inputs[6].value), 0);
-    const hueRange2 = nullOrDefault(parseInt(inputs[7].value), 0);
-    const saturationCenter2 = nullOrDefault(parseInt(inputs[8].value), 0);
-    const saturationRange2 = nullOrDefault(parseInt(inputs[9].value), 0);
-    const valueCenter2 = nullOrDefault(parseInt(inputs[10].value), 0);
-    const valueRange2 = nullOrDefault(parseInt(inputs[11].value), 0);
-    const areas = document.getElementsByClassName("area");
-    const area1 = nullOrDefault(parseInt(areas[0].value), 0);
-    const area2 = nullOrDefault(parseInt(areas[1].value), 0);
-    const cameras = document.getElementsByClassName("camera-select");
-    const camera1 = Number(cameras[0].value);
-    const camera2 = Number(cameras[1].value);
-    const ports = document.getElementsByClassName("port-select");
-    const port1 = ports[0].value;
-    const port2 = ports[1].value;
-    const masks = document.getElementsByClassName("show-mask");
-    const mask1 = masks[0].checked;
-    const mask2 = masks[1].checked;
-    const baud = document.getElementsByClassName("baudRate");
-    const baudrate1 = Number(baud[0].value);
-    const baudrate2 = Number(baud[1].value);
-    const corner1 = coord1;
-    const corner2 = coord2;
-    const data2 = {
-      messageType: "HOST_CONFIGURATION_FROM_CLIENT",
-      token: "",
-      players: [
-        {
-          playerId: 0,
-          camera: {
-            cameraId: camera1,
-            calibration: {
-              topLeft: {
-                x: corner1[0][0],
-                y: corner1[0][1]
+    try{
+      const inputs = document.getElementsByClassName("color-value");
+      const hueCenter1 = nullOrDefault(parseInt(inputs[0].value), 0);
+      const hueRange1 = nullOrDefault(parseInt(inputs[1].value), 0);
+      const saturationCenter1 = nullOrDefault(parseInt(inputs[2].value), 0);
+      const saturationRange1 = nullOrDefault(parseInt(inputs[3].value), 0);
+      const valueCenter1 = nullOrDefault(parseInt(inputs[4].value), 0);
+      const valueRange1 = nullOrDefault(parseInt(inputs[5].value), 0);
+      const hueCenter2 = nullOrDefault(parseInt(inputs[6].value), 0);
+      const hueRange2 = nullOrDefault(parseInt(inputs[7].value), 0);
+      const saturationCenter2 = nullOrDefault(parseInt(inputs[8].value), 0);
+      const saturationRange2 = nullOrDefault(parseInt(inputs[9].value), 0);
+      const valueCenter2 = nullOrDefault(parseInt(inputs[10].value), 0);
+      const valueRange2 = nullOrDefault(parseInt(inputs[11].value), 0);
+      const areas = document.getElementsByClassName("area");
+      const area1 = nullOrDefault(parseInt(areas[0].value), 0);
+      const area2 = nullOrDefault(parseInt(areas[1].value), 0);
+      const cameras = document.getElementsByClassName("camera-select");
+      const camera1 = Number(cameras[0].value);
+      const camera2 = Number(cameras[1].value);
+      const ports = document.getElementsByClassName("port-select");
+      const port1 = ports[0].value;
+      const port2 = ports[1].value;
+      const masks = document.getElementsByClassName("show-mask");
+      const mask1 = masks[0].checked;
+      const mask2 = masks[1].checked;
+      const baud = document.getElementsByClassName("baudRate");
+      const baudrate1 = Number(baud[0].value);
+      const baudrate2 = Number(baud[1].value);
+      const corner1 = coord1;
+      const corner2 = coord2;
+      const data2 = {
+        messageType: "HOST_CONFIGURATION_FROM_CLIENT",
+        token: "",
+        players: [
+          {
+            playerId: 0,
+            camera: {
+              cameraId: camera1,
+              calibration: {
+                topLeft: {
+                  x: corner1[0][0],
+                  y: corner1[0][1]
+                },
+                topRight: {
+                  x: corner1[1][0],
+                  y: corner1[1][1]
+                },
+                bottomLeft: {
+                  x: corner1[3][0],
+                  y: corner1[3][1]
+                },
+                bottomRight: {
+                  x: corner1[2][0],
+                  y: corner1[2][1]
+                }
               },
-              topRight: {
-                x: corner1[1][0],
-                y: corner1[1][1]
-              },
-              bottomLeft: {
-                x: corner1[3][0],
-                y: corner1[3][1]
-              },
-              bottomRight: {
-                x: corner1[2][0],
-                y: corner1[2][1]
+              recognition: {
+                hueCenter: hueCenter1,
+                hueRange: hueRange1,
+                saturationCenter: saturationCenter1,
+                saturationRange: saturationRange1,
+                valueCenter: valueCenter1,
+                valueRange: valueRange1,
+                minArea: area1,
+                showMask: mask1
               }
             },
-            recognition: {
-              hueCenter: hueCenter1,
-              hueRange: hueRange1,
-              saturationCenter: saturationCenter1,
-              saturationRange: saturationRange1,
-              valueCenter: valueCenter1,
-              valueRange: valueRange1,
-              minArea: area1,
-              showMask: mask1
+            serialPort: {
+              port: port1,
+              baudrate: baudrate1
             }
           },
-          serialPort: {
-            port: port1,
-            baudrate: baudrate1
-          }
-        },
-        {
-          playerId: 1,
-          camera: {
-            cameraId: camera2,
-            calibration: {
-              topLeft: {
-                x: corner2[0][0],
-                y: corner2[0][1]
+          {
+            playerId: 1,
+            camera: {
+              cameraId: camera2,
+              calibration: {
+                topLeft: {
+                  x: corner2[0][0],
+                  y: corner2[0][1]
+                },
+                topRight: {
+                  x: corner2[1][0],
+                  y: corner2[1][1]
+                },
+                bottomLeft: {
+                  x: corner2[3][0],
+                  y: corner2[3][1]
+                },
+                bottomRight: {
+                  x: corner2[2][0],
+                  y: corner2[2][1]
+                }
               },
-              topRight: {
-                x: corner2[1][0],
-                y: corner2[1][1]
-              },
-              bottomLeft: {
-                x: corner2[3][0],
-                y: corner2[3][1]
-              },
-              bottomRight: {
-                x: corner2[2][0],
-                y: corner2[2][1]
+              recognition: {
+                hueCenter: hueCenter2,
+                hueRange: hueRange2,
+                saturationCenter: saturationCenter2,
+                saturationRange: saturationRange2,
+                valueCenter: valueCenter2,
+                valueRange: valueRange2,
+                minArea: area2,
+                showMask: mask2
               }
             },
-            recognition: {
-              hueCenter: hueCenter2,
-              hueRange: hueRange2,
-              saturationCenter: saturationCenter2,
-              saturationRange: saturationRange2,
-              valueCenter: valueCenter2,
-              valueRange: valueRange2,
-              minArea: area2,
-              showMask: mask2
+            serialPort: {
+              port: port2,
+              baudrate: baudrate2
             }
-          },
-          serialPort: {
-            port: port2,
-            baudrate: baudrate2
           }
-        }
-      ]
+        ]
+      }
+      return data2;
     }
-    return data2;
+    catch{
+      return null;
+    }
   }
+
   useEffect(
     () => {
       const ws = new WebSocket(server);
@@ -337,7 +343,7 @@ const App = () => {
         gameState = "ENDED";
       }
       canvas.onclick = () => {
-        if (calibrated1 && calibrated2 && message) {
+        if (calibrated1 && calibrated2 && message && data2 != null) {
           ws.send(JSON.stringify(data2()));
           message = false;
           console.log('send data2');
