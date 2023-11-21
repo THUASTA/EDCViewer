@@ -10,6 +10,7 @@ import GridCanvas from './GridCanvas';
 const server = 'ws://localhost:8080'
 
 const App = () => {
+  var gameState = "STANDBY";
   const [camera1, setCamera1] = useState(null);
   const [camera2, setCamera2] = useState(null);
   const [player1, setPlayer1] = useState(null);
@@ -250,6 +251,54 @@ const App = () => {
           setPlayer1(data.players.find((value) => value.playerId === 1));
           setPlayer2(data.players.find((value) => value.playerId === 2));
         }
+
+        if (data.messageType === 'HOST_CONFIGURATION_FROM_SERVER') {
+          // setCamera1(data.cameras.find((value) => value.cameraId === 1));
+          // setCamera2(data.cameras.find((value) => value.cameraId === 2));
+          // setPlayer1(data.players.find((value) => value.playerId === 1));
+          // setPlayer2(data.players.find((value) => value.playerId === 2));
+
+          const ports = document.getElementsByClassName("port-select");
+          const cameras = document.getElementsByClassName("camera-select");
+          // 假设data.availableCameras是一个包含摄像头信息的数组
+          const newCameras = data.availableCameras;
+          const newPorts = data.availableSerialPorts;
+          // 遍历每个 "port-select" 元素
+          Array.from(ports).forEach((portElement, index) => {
+            // 清空当前选择框的选项
+            portElement.innerHTML = "";
+
+            // 为选择框添加新的选项
+            newPorts.forEach((port) => {
+              const option = document.createElement("option");
+              option.value = port; // 假设摄像头对象有一个id属性
+              option.text = port; // 假设摄像头对象有一个name属性
+              portElement.add(option);
+            });
+
+            // 如果需要，你还可以设置默认值
+            // port.value = newPorts[0].id; // 假设选择第一个摄像头作为默认值
+          });
+
+          // 遍历每个 "port-select" 元素
+          Array.from(cameras).forEach((cameraElement, index) => {
+            // 清空当前选择框的选项
+            cameraElement.innerHTML = "";
+
+            // 为选择框添加新的选项
+            newCameras.forEach((camera) => {
+              const option = document.createElement("option");
+              option.value = camera; // 假设摄像头对象有一个id属性
+              option.text = camera; // 假设摄像头对象有一个name属性
+              cameraElement.add(option);
+            });
+
+            // 如果需要，你还可以设置默认值
+            // port.value = newPorts[0].id; // 假设选择第一个摄像头作为默认值
+          });
+        }
+
+
       };
 
       ws.onclose = () => {
@@ -260,6 +309,9 @@ const App = () => {
       const setting = document.getElementById("setting");
       const canvas = document.getElementById("canvas");
       setting.onclick = async () => {
+
+        ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "GET_HOST_CONFIGURATION", token: "" }));
+
         setTimeout(() => {
           const confirm = document.getElementById("confirmbutton");
           confirm.onclick = () => {
@@ -277,10 +329,18 @@ const App = () => {
       }
 
       start.onclick = () => {
-        ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "START", token: "" }));
+        if (gameState === "STANDBY") {
+          ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "START", token: "" }));
+          gameState = "RUNNING";
+        }
+        else if (gameState === "ENDED") {
+          ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "RESET", token: "" }));
+          gameState = "STANDBY";
+        }
       }
       end.onclick = () => {
         ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "END", token: "" }));
+        gameState = "ENDED";
       }
       canvas.onclick = () => {
         if (calibrated1 && calibrated2 && message && data2 != null) {
