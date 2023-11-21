@@ -246,10 +246,10 @@ const App = () => {
 
         // about the data format, see https://thuasta.github.io/EDCHost/api/viewer/
         if (data.messageType === 'COMPETITION_UPDATE') {
-          setCamera1(data.cameras.find((value) => value.cameraId === 1));
-          setCamera2(data.cameras.find((value) => value.cameraId === 2));
-          setPlayer1(data.players.find((value) => value.playerId === 1));
-          setPlayer2(data.players.find((value) => value.playerId === 2));
+          setCamera1(data.cameras.find((value) => value.cameraId === 0));
+          setCamera2(data.cameras.find((value) => value.cameraId === 1));
+          setPlayer1(data.players.find((value) => value.playerId === 0));
+          setPlayer2(data.players.find((value) => value.playerId === 1));
         }
 
         if (data.messageType === 'HOST_CONFIGURATION_FROM_SERVER') {
