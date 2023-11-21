@@ -267,6 +267,24 @@ const App = () => {
           setPlayer1(data.players.find((value) => value.playerId === 0));
           setPlayer2(data.players.find((value) => value.playerId === 1));
           setMines(data.mines);
+          // 这部分是生成随机矿石来测试
+
+          //let randIdx = parseInt((Date.parse(new Date())) / 1000) % 3;
+          //let randMines = [
+          //  [
+          //    { oreType: 1, position: { x: 2, y: 2 } },
+          //    { oreType: 1, position: { x: 3, y: 3 } },
+          //  ],
+          //  [
+          //    { oreType: 2, position: { x: 4, y: 4 } },
+          //    { oreType: 2, position: { x: 5, y: 5 } },
+          //  ],
+          //  [
+          //    { oreType: 0, position: { x: 6, y: 6 } },
+          //    { oreType: 0, position: { x: 7, y: 7 } },
+          //  ],
+          //]
+          //setMines(randMines[randIdx]);
           setChunks(data.chunks);
         }
 
