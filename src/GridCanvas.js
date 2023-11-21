@@ -245,7 +245,7 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback }) => {
     let imageNum = 3;
     let imageArray = [];
     let loadNum = 0;
-    let srcArray = ["assets/2.png", "assets/3.png", "assets/4.png"];
+    let srcArray = ["assets/diamond.png", "assets/gold_ingot.png", "assets/iron_ingot.png"];
     let indexArray = [];
 
     const gridCanvas = useRef(null);
