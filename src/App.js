@@ -83,7 +83,7 @@ const App = () => {
                 showMask: mask1
               }
             },
-           serialPort: port1 === "" ? undefined : {
+            serialPort: port1 === "" ? undefined : {
               portName: port1,
               baudRate: baudrate1
             }
@@ -486,31 +486,42 @@ const App = () => {
       </div>
       <div class='flex' id="canvas">
         <div class='video-canvas-container'>
-            {camera1 ?
-              <VideoStreamPlayer
-                data={camera1.frameData}
-                width={camera1.width}
-                height={camera1.height}
-              />
-              : <></>}
-            <GridCanvas
-              calibrating={calibrating} finishCalibrateCallback={finishCalibrate1}
-              mines={mines} />
-        </div>
-        <div class='video-canvas-container'>
-            {camera2 ?
-              <VideoStreamPlayer
-                data={camera2.frameData}
-                width={camera2.width}
-                height={camera2.height}
-              />
-              : <></>}
-            <GridCanvas
-              calibrating={calibrating} finishCalibrateCallback={finishCalibrate2}
-              mines={mines} />
+          {camera1 ?
+            <VideoStreamPlayer
+              data={camera1.frameData}
+              width={camera1.width}
+              height={camera1.height}
+            />
+            : <></>}
+          <GridCanvas
+            calibrating={calibrating} finishCalibrateCallback={finishCalibrate1}
+            mines={mines}
+            homePosition1={player1 ? player1.homePosition : null}
+            playerPosition1={player1 ? player1.position : null}
+            homePosition2={player2 ? player2.homePosition : null}
+            playerPosition2={player2 ? player2.position : null}
+          />
         </div>
       </div>
+      <div class='video-canvas-container'>
+        {camera2 ?
+          <VideoStreamPlayer
+            data={camera2.frameData}
+            width={camera2.width}
+            height={camera2.height}
+          />
+          : <></>}
+        <GridCanvas
+          calibrating={calibrating} finishCalibrateCallback={finishCalibrate2}
+          mines={mines}
+          homePosition1={player1 ? player1.homePosition : null}
+          playerPosition1={player1 ? player1.position : null}
+          homePosition2={player2 ? player2.homePosition : null}
+          playerPosition2={player2 ? player2.position : null}
+        />
+      </div>
     </div>
+
   )
 }
 
