@@ -19,101 +19,115 @@ const App = () => {
   var calibrated1 = false;
   var calibrated2 = false;
   var message = true;
-  function data1() {
-    const inputs = document.getElementsByClassName("color-value");
-    const hueCenter1 = inputs[0].value;
-    const hueRange1 = inputs[1].value;
-    const saturationCenter1 = inputs[2].value;
-    const saturationRange1 = inputs[3].value;
-    const valueCenter1 = inputs[4].value;
-    const valueRange1 = inputs[5].value;
-    const hueCenter2 = inputs[6].value;
-    const hueRange2 = inputs[7].value;
-    const saturationCenter2 = inputs[8].value;
-    const saturationRange2 = inputs[9].value;
-    const valueCenter2 = inputs[10].value;
-    const valueRange2 = inputs[11].value;
-    const areas = document.getElementsByClassName("area");
-    const area1 = areas[0].value;
-    const area2 = areas[1].value;
-    const cameras = document.getElementsByClassName("camera-select");
-    const camera1 = Number(cameras[0].value);
-    const camera2 = Number(cameras[1].value);
-    const ports = document.getElementsByClassName("port-select");
-    const port1 = ports[0].value;
-    const port2 = ports[1].value;
-    const masks = document.getElementsByClassName("show-mask");
-    const mask1 = masks[0].checked;
-    const mask2 = masks[1].checked;
-    const baud = document.getElementsByClassName("baudRate");
-    const baudrate1 = Number(baud[0].value);
-    const baudrate2 = Number(baud[1].value);
-    const data1 = {
-      messageType: "HOST_CONFIGURATION_FROM_CLIENT",
-      token: "",
-      players: [
-        {
-          playerId: 0,
-          camera: {
-            cameraId: camera1,
-            recognition: {
-              hueCenter: hueCenter1,
-              hueRange: hueRange1,
-              saturationCenter: saturationCenter1,
-              saturationRange: saturationRange1,
-              valueCenter: valueCenter1,
-              valueRange: valueRange1,
-              minArea: area1,
-              showMask: mask1
-            }
-          },
-          serialPort: {
-            port: port1,
-            baudrate: baudrate1
-          }
-        },
-        {
-          playerId: 1,
-          camera: {
-            cameraId: camera2,
-            recognition: {
-              hueCenter: hueCenter2,
-              hueRange: hueRange2,
-              saturationCenter: saturationCenter2,
-              saturationRange: saturationRange2,
-              valueCenter: valueCenter2,
-              valueRange: valueRange2,
-              minArea: area2,
-              showMask: mask2
-            }
-          },
-          serialPort: {
-            port: port2,
-            baudrate: baudrate2
-          }
-
-        }
-      ]
+  function nullOrDefault(inputValue, defaultValue) {
+    if (inputValue === null || inputValue === undefined || isNaN(inputValue)) {
+      return defaultValue;
     }
-    return data1;
+    else return inputValue;
+  }
+  function data1() {
+    try {
+      const inputs = document.getElementsByClassName("color-value");
+      console.log(parseInt(inputs[0].value));
+      console.log(nullOrDefault(parseInt(inputs[0].value), 0));
+      const hueCenter1 = nullOrDefault(parseInt(inputs[0].value), 0);
+      const hueRange1 = nullOrDefault(parseInt(inputs[1].value), 0);
+      const saturationCenter1 = nullOrDefault(parseInt(inputs[2].value), 0);
+      const saturationRange1 = nullOrDefault(parseInt(inputs[3].value), 0);
+      const valueCenter1 = nullOrDefault(parseInt(inputs[4].value), 0);
+      const valueRange1 = nullOrDefault(parseInt(inputs[5].value), 0);
+      const hueCenter2 = nullOrDefault(parseInt(inputs[6].value), 0);
+      const hueRange2 = nullOrDefault(parseInt(inputs[7].value), 0);
+      const saturationCenter2 = nullOrDefault(parseInt(inputs[8].value), 0);
+      const saturationRange2 = nullOrDefault(parseInt(inputs[9].value), 0);
+      const valueCenter2 = nullOrDefault(parseInt(inputs[10].value), 0);
+      const valueRange2 = nullOrDefault(parseInt(inputs[11].value), 0);
+      const areas = document.getElementsByClassName("area");
+      const area1 = nullOrDefault(parseInt(areas[0].value));
+      const area2 = nullOrDefault(parseInt(areas[1].value));
+      const cameras = document.getElementsByClassName("camera-select");
+      const camera1 = Number(cameras[0].value);
+      const camera2 = Number(cameras[1].value);
+      const ports = document.getElementsByClassName("port-select");
+      const port1 = ports[0].value;
+      const port2 = ports[1].value;
+      // console.log(port1);
+      const masks = document.getElementsByClassName("show-mask");
+      const mask1 = masks[0].checked;
+      const mask2 = masks[1].checked;
+      const baud = document.getElementsByClassName("baudRate");
+      const baudrate1 = Number(baud[0].value);
+      const baudrate2 = Number(baud[1].value);
+      const data1 = {
+        messageType: "HOST_CONFIGURATION_FROM_CLIENT",
+        token: "",
+        players: [
+          {
+            playerId: 0,
+            camera: {
+              cameraId: camera1,
+              recognition: {
+                hueCenter: hueCenter1,
+                hueRange: hueRange1,
+                saturationCenter: saturationCenter1,
+                saturationRange: saturationRange1,
+                valueCenter: valueCenter1,
+                valueRange: valueRange1,
+                minArea: area1,
+                showMask: mask1
+              }
+            },
+            serialPort: {
+              port: port1,
+              baudrate: baudrate1
+            }
+          },
+          {
+            playerId: 1,
+            camera: {
+              cameraId: camera2,
+              recognition: {
+                hueCenter: hueCenter2,
+                hueRange: hueRange2,
+                saturationCenter: saturationCenter2,
+                saturationRange: saturationRange2,
+                valueCenter: valueCenter2,
+                valueRange: valueRange2,
+                minArea: area2,
+                showMask: mask2
+              }
+            },
+            serialPort: {
+              port: port2,
+              baudrate: baudrate2
+            }
+
+          }
+        ]
+      }
+      return data1;
+    }
+    catch {
+      return null;
+    }
   }
   function data2() {
     const inputs = document.getElementsByClassName("color-value");
-    const hueCenter1 = inputs[0].value;
-    const hueRange1 = inputs[1].value;
-    const saturationCenter1 = inputs[2].value;
-    const saturationRange1 = inputs[3].value;
-    const valueCenter1 = inputs[4].value;
-    const valueRange1 = inputs[5].value;
-    const hueCenter2 = inputs[6].value;
-    const hueRange2 = inputs[7].value;
-    const saturationCenter2 = inputs[8].value;
-    const saturationRange2 = inputs[9].value;
-    const valueCenter2 = inputs[10].value;
-    const valueRange2 = inputs[11].value;
+    const hueCenter1 = nullOrDefault(parseInt(inputs[0].value), 0);
+    const hueRange1 = nullOrDefault(parseInt(inputs[1].value), 0);
+    const saturationCenter1 = nullOrDefault(parseInt(inputs[2].value), 0);
+    const saturationRange1 = nullOrDefault(parseInt(inputs[3].value), 0);
+    const valueCenter1 = nullOrDefault(parseInt(inputs[4].value), 0);
+    const valueRange1 = nullOrDefault(parseInt(inputs[5].value), 0);
+    const hueCenter2 = nullOrDefault(parseInt(inputs[6].value), 0);
+    const hueRange2 = nullOrDefault(parseInt(inputs[7].value), 0);
+    const saturationCenter2 = nullOrDefault(parseInt(inputs[8].value), 0);
+    const saturationRange2 = nullOrDefault(parseInt(inputs[9].value), 0);
+    const valueCenter2 = nullOrDefault(parseInt(inputs[10].value), 0);
+    const valueRange2 = nullOrDefault(parseInt(inputs[11].value), 0);
     const areas = document.getElementsByClassName("area");
-    const area1 = areas[0].value;
-    const area2 = areas[1].value;
+    const area1 = nullOrDefault(parseInt(areas[0].value), 0);
+    const area2 = nullOrDefault(parseInt(areas[1].value), 0);
     const cameras = document.getElementsByClassName("camera-select");
     const camera1 = Number(cameras[0].value);
     const camera2 = Number(cameras[1].value);
@@ -230,6 +244,54 @@ const App = () => {
           setPlayer1(data.players.find((value) => value.playerId === 1));
           setPlayer2(data.players.find((value) => value.playerId === 2));
         }
+
+        if (data.messageType === 'HOST_CONFIGURATION_FROM_SERVER') {
+          // setCamera1(data.cameras.find((value) => value.cameraId === 1));
+          // setCamera2(data.cameras.find((value) => value.cameraId === 2));
+          // setPlayer1(data.players.find((value) => value.playerId === 1));
+          // setPlayer2(data.players.find((value) => value.playerId === 2));
+
+          const ports = document.getElementsByClassName("port-select");
+          const cameras = document.getElementsByClassName("camera-select");
+          // 假设data.availableCameras是一个包含摄像头信息的数组
+          const newCameras = data.availableCameras;
+          const newPorts = data.availableSerialPorts;
+          // 遍历每个 "port-select" 元素
+          Array.from(ports).forEach((portElement, index) => {
+            // 清空当前选择框的选项
+            portElement.innerHTML = "";
+
+            // 为选择框添加新的选项
+            newPorts.forEach((port) => {
+              const option = document.createElement("option");
+              option.value = port; // 假设摄像头对象有一个id属性
+              option.text = port; // 假设摄像头对象有一个name属性
+              portElement.add(option);
+            });
+
+            // 如果需要，你还可以设置默认值
+            // port.value = newPorts[0].id; // 假设选择第一个摄像头作为默认值
+          });
+
+          // 遍历每个 "port-select" 元素
+          Array.from(cameras).forEach((cameraElement, index) => {
+            // 清空当前选择框的选项
+            cameraElement.innerHTML = "";
+
+            // 为选择框添加新的选项
+            newCameras.forEach((camera) => {
+              const option = document.createElement("option");
+              option.value = camera; // 假设摄像头对象有一个id属性
+              option.text = camera; // 假设摄像头对象有一个name属性
+              cameraElement.add(option);
+            });
+
+            // 如果需要，你还可以设置默认值
+            // port.value = newPorts[0].id; // 假设选择第一个摄像头作为默认值
+          });
+        }
+
+
       };
 
       ws.onclose = () => {
@@ -240,6 +302,9 @@ const App = () => {
       const setting = document.getElementById("setting");
       const canvas = document.getElementById("canvas");
       setting.onclick = async () => {
+
+        ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "GET_HOST_CONFIGURATION", token: "" }));
+
         setTimeout(() => {
           const confirm = document.getElementById("confirmbutton");
           confirm.onclick = () => {
