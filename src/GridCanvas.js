@@ -241,7 +241,7 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback }) => {
     const canvasRef = useRef(null);
 
     let num = 8;
-    let width = 600;
+    let width = 770;
     let imageNum = 3;
     let imageArray = [];
     let loadNum = 0;
