@@ -471,7 +471,6 @@ const App = () => {
       </div>
       <div class='flex' id="canvas">
         <div class='video-canvas-container'>
-          <div class='video-stream-player'>
             {camera1 ?
               <VideoStreamPlayer
                 data={camera1.frameData}
@@ -479,15 +478,11 @@ const App = () => {
                 height={camera1.height}
               />
               : <></>}
-          </div>
-          <div class='grid-canvas'>
             <GridCanvas
               calibrating={calibrating} finishCalibrateCallback={finishCalibrate1}
               mines={mines} />
-          </div>
         </div>
         <div class='video-canvas-container'>
-          <div class='video-stream-player'>
             {camera2 ?
               <VideoStreamPlayer
                 data={camera2.frameData}
@@ -495,12 +490,9 @@ const App = () => {
                 height={camera2.height}
               />
               : <></>}
-          </div>
-          <div class='grid-canvas'>
             <GridCanvas
               calibrating={calibrating} finishCalibrateCallback={finishCalibrate2}
               mines={mines} />
-          </div>
         </div>
       </div>
     </div>
