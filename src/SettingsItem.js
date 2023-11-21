@@ -97,7 +97,7 @@ const SettingsItem = ({ title }) => {
                     </div>
                 </div>
                 <div class='settings-item'>
-                    <span class='settings-item-label'>Port</span>
+                    <span class='settings-item-label'>BaudRate</span>
                     <div class='settings-item-value-container'>
                         <select class='baudRate'
                             value={baudRate}
