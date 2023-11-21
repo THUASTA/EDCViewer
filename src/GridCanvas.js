@@ -21,7 +21,7 @@ class Canvas {
                 // let y = event.clientY - bbox.top*(canvas.height/bbox.height);
                 let x = event.offsetX * (canvas.width / bbox.width);
                 let y = event.offsetY * (canvas.height / bbox.height);
-                this.draw_corner(x, y);
+                this.setCorner(x, y);
                 this.clicktimes++;
                 if (this.clicktimes === 4) {
                     callback(this.corner)
@@ -46,9 +46,9 @@ class Canvas {
         this.clicktimes = 0;
     }
 
-    draw_corner(x, y) {
+    setCorner(x, y) {
         if (this.corner.length === 4) {
-            this.reset_calibrate();
+            this.reset();
         }
         let ctx = this.canvas.getContext('2d');
         ctx.lineWidth = 2;
@@ -61,32 +61,50 @@ class Canvas {
         ctx.moveTo(x, y - 4);
         ctx.lineTo(x, y + 4);
         ctx.stroke();
+        console.log("Set Corner");
         // let alphabet = ['A', 'B', 'C', 'D'];
         // ctx.fillText(alphabet[this.corner.length], x+4, y+4)
         this.corner.push([x, y]);
         if (this.corner.length === 4) {
-            this.check_quadrangle();
+            this.checkQuadrangle();
         }
     }
 
-    check_quadrangle() {
+    drawCorner() {
+        let ctx = this.canvas.getContext('2d');
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'red';
+        for (let i = 0; i < this.corner.length; i++) {
+            let x = this.corner[i][0];
+            let y = this.corner[i][1];
+            ctx.beginPath();
+            ctx.moveTo(x - 4, y);
+            ctx.lineTo(x + 4, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y - 4);
+            ctx.lineTo(x, y + 4);
+            ctx.stroke();
+        }
+    }
+
+    checkQuadrangle() {
         let temp = [];
         for (let i = 0; i < this.corner.length; i++) {
             if (temp.length && this.corner[i][0] + this.corner[i][1] < temp[0][0] + temp[0][1]) temp.unshift(this.corner[i]);
             else temp.push(this.corner[i]);
         }
-        this.corner = temp
-        // 
+        this.corner = temp;
         const v = (p1, p2) => { return [p2[0] - p1[0], p2[1] - p1[1]] };
         const cp = (v1, v2) => { return (v1[0] * v2[1]) - (v1[1] * v2[0]) };
         let A = [...this.corner[0]],
             B = [...this.corner[1]],
             C = [...this.corner[2]],
             D = [...this.corner[3]];
-        if (cp(v(A, B), v(A, C)) === 0) this.reset_calibrate();
-        if (cp(v(A, B), v(A, D)) === 0) this.reset_calibrate();
-        if (cp(v(A, C), v(A, D)) === 0) this.reset_calibrate();
-        if (cp(v(B, C), v(B, D)) === 0) this.reset_calibrate();
+        if (cp(v(A, B), v(A, C)) === 0) this.reset();
+        if (cp(v(A, B), v(A, D)) === 0) this.reset();
+        if (cp(v(A, C), v(A, D)) === 0) this.reset();
+        if (cp(v(B, C), v(B, D)) === 0) this.reset();
 
         if (cp(v(A, B), v(A, C)) < 0) {
             // console.log(0);
@@ -100,42 +118,42 @@ class Canvas {
         if (cp(v(A, D), v(A, B)) > 0) {
             if (cp(v(A, D), v(A, C)) < 0) {
                 // console.log(1);
-                this.reset_calibrate();
+                this.reset();
             }
             else if (cp(v(B, D), v(B, C)) > 0) {
                 // console.log(2);
-                this.reset_calibrate();
+                this.reset();
             }
             else {
                 // console.log(3);
                 this.corner = [A, D, B, C];
-                this.draw_broder();
+                this.drawBroder();
             }
         }
         else if (cp(v(A, D), v(A, C)) < 0) {
             if (cp(v(C, D), v(C, B)) < 0) {
                 // console.log(4);
-                this.reset_calibrate();
+                this.reset();
             }
             else {
                 // console.log(5);
                 this.corner = [A, B, C, D];
-                this.draw_broder();
+                this.drawBroder();
             }
         }
         else if (cp(v(B, D), v(B, C)) < 0) {
             // console.log(6);
-            this.reset_calibrate();
+            this.reset();
         }
         else {
             // console.log(7);
             this.corner = [A, B, D, C];
-            this.draw_broder();
+            this.drawBroder();
         }
 
     }
 
-    draw_broder() {
+    drawBroder() {
         // console.log('Draw');
         let ctx = this.canvas.getContext('2d');
         ctx.lineWidth = 1;
@@ -150,14 +168,24 @@ class Canvas {
         ctx.moveTo(this.corner[0][0], this.corner[0][1]);
         ctx.lineTo(this.corner[3][0], this.corner[3][1]);
         ctx.stroke();
-        this.draw_grid();
+        this.drawGrid();
     }
 
-    reset_calibrate() {
+    reset() {
         // console.log('Reset');
         let ctx = this.canvas.getContext('2d');
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.corner = [];
+    }
+
+    refresh() {
+        if (this.corner.length !== 4) return;
+        let ctx = this.canvas.getContext('2d');
+        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.drawCorner();
+        this.drawBroder();
+        this.drawGrid();
+        this.drawLogo();
     }
 
     getPos(i, j) {
@@ -174,7 +202,7 @@ class Canvas {
         return co;
     }
 
-    draw_grid() {
+    drawGrid() {
         let ctx = this.canvas.getContext('2d');
         ctx.lineWidth = 1;
         ctx.strokeStyle = 'blue';
@@ -194,10 +222,10 @@ class Canvas {
             ctx.lineTo(end[0], end[1]);
             ctx.stroke();
         }
-        this.draw_logo();
+        this.drawLogo();
     }
 
-    draw_logo() {
+    drawLogo() {
         let A = [...this.corner[0]],
             B = [...this.corner[1]],
             C = [...this.corner[2]],
@@ -212,7 +240,7 @@ class Canvas {
                 let index = i * this.blockn + j
                 let coord = this.getPos(i+0.5, j+0.5);
                 height = parseInt(((this.blockn - j) * Math.abs(v(A, D)[1]) + j * Math.abs(v(B, C)[1])) / this.blockn / this.blockn);
-                a = Math.min(width, height) * 0.8;
+                a = Math.min(width, height) * 0.75;
                 ctx.globalCompositeOperation = "destination-over";
                 let imgIndex = this.indexArray[index];
                 if (imgIndex !== -1)
@@ -300,10 +328,10 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, chunks , home
             if (gridCanvas.current) {
                 let heightArray = gridCanvas.current.heightArray;
                 chunks.forEach(chunk => {
-                    console.log(chunk);
-                    heightArray[chunk.position.y * num + chunk.position.x] = chunk.height;
-                    // heightArray[chunk.position.y * num + chunk.position.x] = parseInt(Math.random()*8);
+                    // heightArray[chunk.position.y * num + chunk.position.x] = chunk.height;
+                    heightArray[chunk.position.y * num + chunk.position.x] = parseInt(Math.random()*8);
                 });
+                gridCanvas.current.refresh();
             }
         },
         [chunks]
