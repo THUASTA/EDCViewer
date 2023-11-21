@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
 class Canvas {
-    constructor(canvas, width, height, id, blockn, imageArray, indexArray, callback) {
+    constructor(canvas, width, height, id, blockn, imageArray, indexArray, heightArray, callback) {
         this.id = id;
         this.canvas = canvas;
         this.canvas.id = 'canvas_' + id;
@@ -31,35 +31,20 @@ class Canvas {
         this.blockn = blockn;
         this.imageArray = imageArray;
         this.indexArray = indexArray;
+        this.heightArray = heightArray;
         //document.body.appendChild(this.canvas);
 
         this.corner = [];
 
     }
+
     state = {
         corner: this.corner,
     }
+
     startCalibrate() {
         this.clicktimes = 0;
     }
-
-    getIntersection(x1, y1, x2, y2, x3, y3, x4, y4) {
-        let a = y1 - y2;
-        let b = x2 - x1;
-        let x = x2 * y1 - x1 * y2;
-        let c = y3 - y4;
-        let d = x4 - x3;
-        let y = x4 * y3 - x3 * y4;
-        return (this.solveEquation(a, b, c, d, x, y));
-    }
-
-
-
-    solveEquation(a, b, c, d, x, y) {
-        let inv = (a * d - b * c);
-        return ([(d * x - b * y) / inv, (a * y - c * x) / inv]);
-    }
-
 
     draw_corner(x, y) {
         if (this.corner.length === 4) {
@@ -150,7 +135,6 @@ class Canvas {
 
     }
 
-
     draw_broder() {
         // console.log('Draw');
         let ctx = this.canvas.getContext('2d');
@@ -176,27 +160,36 @@ class Canvas {
         this.corner = [];
     }
 
-    draw_grid() {
-        const v = (p1, p2) => { return [p2[0] - p1[0], p2[1] - p1[1]] };
-        const mul = (p, l) => { return [p[0] * l, p[1] * l] };
-        const add = (p1, p2) => { return [p1[0] + p2[0], p1[1] + p2[1]] };
+    getPos(i, j) {
         let A = [...this.corner[0]],
             B = [...this.corner[1]],
             C = [...this.corner[2]],
             D = [...this.corner[3]];
+        const v = (p1, p2) => { return [p2[0] - p1[0], p2[1] - p1[1]] };
+        const mul = (p, l) => { return [p[0] * l, p[1] * l] };
+        const add = (p1, p2) => { return [p1[0] + p2[0], p1[1] + p2[1]] };
+        let hs = add(A, mul(v(A, D), i / this.blockn));
+        let he = add(B, mul(v(B, C), i / this.blockn));
+        let co = add(hs, mul(v(hs, he), j / this.blockn));
+        return co;
+    }
+
+    draw_grid() {
         let ctx = this.canvas.getContext('2d');
         ctx.lineWidth = 1;
         ctx.strokeStyle = 'blue';
         for (let i = 1; i < this.blockn; i++) {
-            let start = add(A, mul(v(A, D), i / this.blockn));
-            let end = add(B, mul(v(B, C), i / this.blockn));
+            // Horizontal
+            let start = this.getPos(i, 0);
+            let end = this.getPos(i, 8);
             ctx.moveTo(start[0], start[1]);
             ctx.lineTo(end[0], end[1]);
             ctx.stroke();
         }
         for (let i = 1; i < this.blockn; i++) {
-            let start = add(A, mul(v(A, B), i / this.blockn));
-            let end = add(D, mul(v(D, C), i / this.blockn));
+            // Vertical
+            let start = this.getPos(0, i);
+            let end = this.getPos(this.blockn, i);
             ctx.moveTo(start[0], start[1]);
             ctx.lineTo(end[0], end[1]);
             ctx.stroke();
@@ -205,43 +198,45 @@ class Canvas {
     }
 
     draw_logo() {
-        const v = (p1, p2) => { return [p2[0] - p1[0], p2[1] - p1[1]] };
-        const mul = (p, l) => { return [p[0] * l, p[1] * l] };
-        const add = (p1, p2) => { return [p1[0] + p2[0], p1[1] + p2[1]] };
         let A = [...this.corner[0]],
             B = [...this.corner[1]],
             C = [...this.corner[2]],
             D = [...this.corner[3]];
+        const v = (p1, p2) => { return [p2[0] - p1[0], p2[1] - p1[1]] };
         let ctx = this.canvas.getContext('2d');
-        let hStart;
-        let hEnd;
-        let vStart;
-        let vEnd;
-        let coord;
-        let a;
-        let width;
-        let height;
+        let a, width, height;
 
         for (let i = 0; i < this.blockn; i++) {
-            hStart = add(A, mul(v(A, D), (i + 0.5) / this.blockn));
-            hEnd = add(B, mul(v(B, C), (i + 0.5) / this.blockn));
-            width = parseInt(((this.blockn - i) * Math.abs(v(A, B)[0]) + i * Math.abs(v(D, C)[0])) / this.blockn / this.blockn);
+           width = parseInt(((this.blockn - i) * Math.abs(v(A, B)[0]) + i * Math.abs(v(D, C)[0])) / this.blockn / this.blockn);
             for (let j = 0; j < this.blockn; j++) {
-                vStart = add(A, mul(v(A, B), (j + 0.5) / this.blockn));
-                vEnd = add(D, mul(v(D, C), (j + 0.5) / this.blockn));
+                let index = i * this.blockn + j
+                let coord = this.getPos(i+0.5, j+0.5);
                 height = parseInt(((this.blockn - j) * Math.abs(v(A, D)[1]) + j * Math.abs(v(B, C)[1])) / this.blockn / this.blockn);
-                coord = this.getIntersection(hStart[0], hStart[1], hEnd[0], hEnd[1], vStart[0], vStart[1], vEnd[0], vEnd[1]);
                 a = Math.min(width, height) * 0.8;
                 ctx.globalCompositeOperation = "destination-over";
-                let index = this.indexArray[i * this.blockn + j];
-                if (index !== -1)
-                    ctx.drawImage(this.imageArray[index], coord[0] - a / 2, coord[1] - a / 2, a, a);
+                let imgIndex = this.indexArray[index];
+                if (imgIndex !== -1)
+                    ctx.drawImage(this.imageArray[imgIndex], coord[0] - a / 2, coord[1] - a / 2, a, a);
+                ctx.fillStyle = 'red';
+                let bar = Math.max(this.heightArray[index] - 4, 0);
+                ctx.moveTo(this.getPos(i, j)[0], this.getPos(i, j)[1]);
+                ctx.lineTo(this.getPos(i+0.2, j)[0], this.getPos(i+0.2, j)[1]);
+                ctx.lineTo(this.getPos(i+0.2, j+0.25*bar)[0], this.getPos(i+0.2, j+0.25*bar)[1]);
+                ctx.lineTo(this.getPos(i, j+0.25*bar)[0], this.getPos(i, j+0.25*bar)[1]);
+                ctx.fill();
+                ctx.fillStyle = 'green';
+                bar = Math.min(this.heightArray[index], 4);
+                ctx.moveTo(this.getPos(i+1, j)[0], this.getPos(i+1, j)[1]);
+                ctx.lineTo(this.getPos(i+0.8, j)[0], this.getPos(i+0.8, j)[1]);
+                ctx.lineTo(this.getPos(i+0.8, j+0.25*bar)[0], this.getPos(i+0.8, j+0.25*bar)[1]);
+                ctx.lineTo(this.getPos(i+1, j+0.25*bar)[0], this.getPos(i+1, j+0.25*bar)[1]);
+                ctx.fill();
             }
         }
     }
 }
 
-const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, homePosition1, playerPosition1, homePosition2, playerPosition2 }) => {
+const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, chunks , homePosition1, playerPosition1, homePosition2, playerPosition2 }) => {
     const canvasRef = useRef(null);
 
     let num = 8;
@@ -259,7 +254,9 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, homePosition1
                 canvasRef.current,
                 width, width * 0.75, 'c1',
                 num,
-                imageArray, [...Array(num * num)].map(x => -1),
+                imageArray,
+                [...Array(num * num)].map(() => -1),
+                [...Array(num * num)].map(() => 0),
                 finishCalibrateCallback
             );
         }
@@ -276,9 +273,6 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, homePosition1
     );
     useEffect(
         () => {
-            //for (let i = 0; i < 81; i++) {
-            //    indexArray.push(i % 3)
-            //}
             if (gridCanvas.current) {
                 let indexArray = gridCanvas.current.indexArray;
                 indexArray.fill(-1);
@@ -300,6 +294,19 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, homePosition1
             }
         },
         [mines]
+    );
+    useEffect(
+        () => {
+            if (gridCanvas.current) {
+                let heightArray = gridCanvas.current.heightArray;
+                chunks.forEach(chunk => {
+                    console.log(chunk);
+                    heightArray[chunk.position.y * num + chunk.position.x] = chunk.height;
+                    // heightArray[chunk.position.y * num + chunk.position.x] = parseInt(Math.random()*8);
+                });
+            }
+        },
+        [chunks]
     );
 
     useEffect(
