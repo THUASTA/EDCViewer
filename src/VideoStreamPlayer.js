@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 
 const VideoStreamPlayer = ({ data, width, height }) => {
     const canvasRef = useRef(null);
+    const imgRef = useRef(new Image());
 
     useEffect(
         () => {
@@ -14,10 +15,9 @@ const VideoStreamPlayer = ({ data, width, height }) => {
             const imageBlob = new Blob([blob], { type: 'image/jpeg' });
             const imageObjectURL = URL.createObjectURL(imageBlob);
 
-            const img = new Image();
+            let img = imgRef.current;
             img.src = imageObjectURL;
             img.onload = () => {
-                console.log('image loaded');
                 canvas.width = width;
                 canvas.height = height;
                 context.clearRect(0, 0, canvas.width, canvas.height);
