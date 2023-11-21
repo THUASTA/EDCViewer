@@ -275,14 +275,13 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines }) => {
             //for (let i = 0; i < 81; i++) {
             //    indexArray.push(i % 3)
             //}
-            console.log(mines);
             if (gridCanvas.current) {
                 let indexArray = gridCanvas.current.indexArray;
                 indexArray.fill(-1);
                 mines.forEach(mine => {
                     let x = parseInt(mine.position.x);
                     let y = parseInt(mine.position.y);
-                    if (mine.oreType === 3)
+                    if (mine.oreType === 1)
                         indexArray[y * num + x] = 0;
                     else if (mine.oreType === 0)
                         indexArray[y * num + x] = 1;
