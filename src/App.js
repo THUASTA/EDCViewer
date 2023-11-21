@@ -7,7 +7,7 @@ import PlayerInfo from './PlayerInfo';
 import VideoStreamPlayer from './VideoStreamPlayer';
 import SettingsItem from './SettingsItem';
 import GridCanvas from './GridCanvas';
-const server = 'ws://localhost:8080'
+var server = 'ws://localhost:8080'
 
 const App = () => {
   var gameState = "STANDBY";
@@ -17,6 +17,8 @@ const App = () => {
   const [player2, setPlayer2] = useState(null);
   const [mines, setMines] = useState([]);
   const [chunks, setChunks] = useState([]);
+  const [ipAddress, setIPAddress] = useState('');
+  const [isOpen, setIsOpen] = useState(true);
 
   var coord1 = [];
   var coord2 = [];
@@ -238,8 +240,10 @@ const App = () => {
 
   useEffect(
     () => {
+      if(!isOpen){
+      server = "ws://" + ipAddress
       const ws = new WebSocket(server);
-
+      console.log('enter');
       ws.onopen = () => {
         console.log('WebSocket connected to ' + server);
       };
@@ -392,8 +396,8 @@ const App = () => {
       return () => {
         ws.close(); // close the WebSocket connection when the component is unmounted
       };
-    },
-    []
+    }},
+    [isOpen]
   );
 
   const [calibrating, setCalibrating] = useState(false);
@@ -418,8 +422,31 @@ const App = () => {
     // send messages
   }
 
+  const handleConfirm = () => {
+    console.log('保存的IP地址为:', ipAddress);
+    setIsOpen(false);
+  };
+
   return (
     <div class='app-container'>
+      <>
+      {isOpen && (
+        <div className="dialog-overlay">
+          <div className="dialog">
+            <h2>请输入您的IP地址</h2>
+            <input
+              type="text"
+              value={ipAddress}
+              onChange={(e) => setIPAddress(e.target.value)}
+              placeholder="IP:Port"
+            />
+            <div className="button-container">
+              <button onClick={handleConfirm}>确认</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
       <div class='top'>
         <div class='control-buttons-container'>
           <div class='control-buttons-row'>
