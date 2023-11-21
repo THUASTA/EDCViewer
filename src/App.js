@@ -15,6 +15,8 @@ const App = () => {
   const [camera2, setCamera2] = useState(null);
   const [player1, setPlayer1] = useState(null);
   const [player2, setPlayer2] = useState(null);
+  const [mines, setMines] = useState([]);
+
   var coord1 = [];
   var coord2 = [];
   var calibrated1 = false;
@@ -250,6 +252,8 @@ const App = () => {
           setCamera2(data.cameras.find((value) => value.cameraId === 1));
           setPlayer1(data.players.find((value) => value.playerId === 0));
           setPlayer2(data.players.find((value) => value.playerId === 1));
+
+          setMines(data.mines);
         }
 
         if (data.messageType === 'HOST_CONFIGURATION_FROM_SERVER') {
@@ -478,7 +482,8 @@ const App = () => {
           </div>
           <div class='grid-canvas'>
             <GridCanvas
-              calibrating={calibrating} finishCalibrateCallback={finishCalibrate1} />
+              calibrating={calibrating} finishCalibrateCallback={finishCalibrate1}
+              mines={mines} />
           </div>
         </div>
         <div class='video-canvas-container'>
@@ -493,7 +498,8 @@ const App = () => {
           </div>
           <div class='grid-canvas'>
             <GridCanvas
-              calibrating={calibrating} finishCalibrateCallback={finishCalibrate2} />
+              calibrating={calibrating} finishCalibrateCallback={finishCalibrate2}
+              mines={mines} />
           </div>
         </div>
       </div>
