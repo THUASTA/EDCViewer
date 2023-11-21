@@ -266,13 +266,16 @@ class Canvas {
 
 const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, chunks , homePosition1, playerPosition1, homePosition2, playerPosition2 }) => {
     const canvasRef = useRef(null);
-
+    
     let num = 8;
     let width = 600;
     let imageArray = [];
     let loadNum = 0;
     let srcArray = ["assets/iron_ingot.png", "assets/gold_ingot.png", "assets/diamond.png", "assets/steve.png", "assets/alex.png", "assets/red_bed.png", "assets/blue_bed.png"];
     let imageNum = srcArray.length;
+
+    const indexArrayRef = useRef([...Array(num * num)].map(() => -1));
+    const heightArrayRef = useRef([...Array(num * num)].map(() => 0));
 
     const gridCanvas = useRef(null);
     const tmpload = () => {
@@ -302,7 +305,7 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, chunks , home
     useEffect(
         () => {
             if (gridCanvas.current) {
-                let indexArray = gridCanvas.current.indexArray;
+                let indexArray = indexArrayRef.current;
                 indexArray.fill(-1);
                 mines.forEach(mine => {
                     let x = parseInt(mine.position.x);
@@ -319,6 +322,11 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, chunks , home
                 indexArray[parseInt(homePosition2.y) * num + parseInt(homePosition2.x)] = 6;
                 indexArray[parseInt(playerPosition1.y) * num + parseInt(playerPosition1.x)] = 3;
                 indexArray[parseInt(playerPosition2.y) * num + parseInt(playerPosition2.x)] = 4;
+
+                if (!(indexArrayRef.current.every((v, i) => v === gridCanvas.current.indexArray[i]))) {
+                    gridCanvas.current.refresh();
+                    indexArrayRef.current.forEach((v, i) => gridCanvas.current.indexArray[i] = v);
+                }
             }
         },
         [mines]
@@ -326,12 +334,15 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, chunks , home
     useEffect(
         () => {
             if (gridCanvas.current) {
-                let heightArray = gridCanvas.current.heightArray;
+                let heightArray = heightArrayRef.current;
                 chunks.forEach(chunk => {
-                    // heightArray[chunk.position.y * num + chunk.position.x] = chunk.height;
-                    heightArray[chunk.position.y * num + chunk.position.x] = parseInt(Math.random()*8);
+                    heightArray[chunk.position.y * num + chunk.position.x] = chunk.height;
+                    // heightArray[chunk.position.y * num + chunk.position.x] = parseInt(Math.random()*8);
                 });
-                gridCanvas.current.refresh();
+                if (!(heightArrayRef.current.every((v, i) => v === gridCanvas.current.heightArray[i]))) {
+                    gridCanvas.current.refresh();
+                    heightArrayRef.current.forEach((v, i) => gridCanvas.current.heightArray[i] = v);
+                }
             }
         },
         [chunks]
