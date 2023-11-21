@@ -10,6 +10,7 @@ import GridCanvas from './GridCanvas';
 const server = 'ws://localhost:8080'
 
 const App = () => {
+  var gameState = "STANDBY";
   const [camera1, setCamera1] = useState(null);
   const [camera2, setCamera2] = useState(null);
   const [player1, setPlayer1] = useState(null);
@@ -319,14 +320,21 @@ const App = () => {
           }
         }, 1000)
 
-
       }
 
       start.onclick = () => {
-        ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "START", token: "" }));
+        if (gameState === "STANDBY") {
+          ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "START", token: "" }));
+          gameState = "RUNNING";
+        }
+        else if (gameState === "ENDED") {
+          ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "RESET", token: "" }));
+          gameState = "STANDBY";
+        }
       }
       end.onclick = () => {
         ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "END", token: "" }));
+        gameState = "ENDED";
       }
       canvas.onclick = () => {
         if (calibrated1 && calibrated2 && message) {
