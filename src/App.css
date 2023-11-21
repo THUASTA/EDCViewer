@@ -81,12 +81,14 @@
 
 .video-stream-player {
   position: absolute;
-  left: 5%;
+  width: 100%;
+  left: 0%;
   top: 0;
 }
 
 .grid-canvas {
   position: absolute;
+  width:100%;
   left: 0;
   top: 0;
 }

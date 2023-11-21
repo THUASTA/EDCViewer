@@ -15,8 +15,12 @@ class Canvas {
         this.callback = callback;
         this.canvas.addEventListener('click', event => {
             if (this.clicktimes < 4) {
-                let x = event.offsetX;
-                let y = event.offsetY;
+
+                let bbox = canvas.getBoundingClientRect();
+                // let x = event.clientX - bbox.left*(canvas.width/bbox.width);
+                // let y = event.clientY - bbox.top*(canvas.height/bbox.height);
+                let x = event.offsetX * (canvas.width / bbox.width);
+                let y = event.offsetY * (canvas.height / bbox.height);
                 this.draw_corner(x, y);
                 this.clicktimes++;
                 if (this.clicktimes === 4) {
@@ -237,15 +241,15 @@ class Canvas {
     }
 }
 
-const GridCanvas = ({ calibrating, finishCalibrateCallback, mines }) => {
+const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, homePosition1, playerPosition1, homePosition2, playerPosition2 }) => {
     const canvasRef = useRef(null);
 
     let num = 8;
-    let width = 770;
-    let imageNum = 3;
+    let width = 600;
     let imageArray = [];
     let loadNum = 0;
-    let srcArray = ["assets/iron_ingot.png", "assets/gold_ingot.png", "assets/diamond.png"];
+    let srcArray = ["assets/iron_ingot.png", "assets/gold_ingot.png", "assets/diamond.png", "assets/steve.png", "assets/alex.png", "assets/red_bed.png", "assets/blue_bed.png"];
+    let imageNum = srcArray.length;
 
     const gridCanvas = useRef(null);
     const tmpload = () => {
@@ -253,7 +257,7 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines }) => {
         if (loadNum === imageNum) {
             gridCanvas.current = new Canvas(
                 canvasRef.current,
-                width, width, 'c1',
+                width, width * 0.75, 'c1',
                 num,
                 imageArray, [...Array(num * num)].map(x => -1),
                 finishCalibrateCallback
@@ -288,6 +292,11 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines }) => {
                     else if (mine.oreType === 2)
                         indexArray[y * num + x] = 2;
                 });
+
+                indexArray[parseInt(homePosition1.y) * num + parseInt(homePosition1.x)] = 5;
+                indexArray[parseInt(homePosition2.y) * num + parseInt(homePosition2.x)] = 6;
+                indexArray[parseInt(playerPosition1.y) * num + parseInt(playerPosition1.x)] = 3;
+                indexArray[parseInt(playerPosition2.y) * num + parseInt(playerPosition2.x)] = 4;
             }
         },
         [mines]
@@ -303,7 +312,7 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines }) => {
     );
 
     return (
-        <canvas ref={canvasRef} />
+        <canvas ref={canvasRef} className='grid-canvas' />
     )
 }
 
