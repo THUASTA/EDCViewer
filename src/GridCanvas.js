@@ -237,15 +237,15 @@ class Canvas {
     }
 }
 
-const GridCanvas = ({ calibrating, finishCalibrateCallback, mines }) => {
+const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, homePosition1, playerPosition1, homePosition2, playerPosition2}) => {
     const canvasRef = useRef(null);
 
     let num = 8;
     let width = 600;
-    let imageNum = 3;
     let imageArray = [];
     let loadNum = 0;
-    let srcArray = ["assets/iron_ingot.png", "assets/gold_ingot.png", "assets/diamond.png"];
+    let srcArray = ["assets/iron_ingot.png", "assets/gold_ingot.png", "assets/diamond.png", "assets/steve.png", "assets/alex.png", "assets/red_bed.png", "assets/blue_bed.png"];
+    let imageNum = srcArray.length;
 
     const gridCanvas = useRef(null);
     const tmpload = () => {
@@ -288,6 +288,11 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines }) => {
                     else if (mine.oreType === 2)
                         indexArray[y * num + x] = 2;
                 });
+
+                indexArray[parseInt(homePosition1.y) * num +   parseInt(homePosition1.x)] = 5;
+                indexArray[parseInt(homePosition2.y) * num +   parseInt(homePosition2.x)] = 6;
+                indexArray[parseInt(playerPosition1.y) * num + parseInt(playerPosition1.x)] = 3;
+                indexArray[parseInt(playerPosition2.y) * num + parseInt(playerPosition2.x)] = 4;
             }
         },
         [mines]

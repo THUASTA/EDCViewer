@@ -245,7 +245,7 @@ const App = () => {
 
       ws.onmessage = (event) => {
         const data = JSON.parse(event.data);
-
+        
         // about the data format, see https://thuasta.github.io/EDCHost/api/viewer/
         if (data.messageType === 'COMPETITION_UPDATE') {
           setCamera1(data.cameras.find((value) => value.cameraId === 0));
@@ -483,7 +483,12 @@ const App = () => {
           <div class='grid-canvas'>
             <GridCanvas
               calibrating={calibrating} finishCalibrateCallback={finishCalibrate1}
-              mines={mines} />
+              mines={mines}
+              homePosition1={player1 ? player1.homePosition : null}
+              playerPosition1={player1 ? player1.position : null}
+              homePosition2={player2 ? player2.homePosition : null}
+              playerPosition2={player2 ? player2.position : null}
+            />
           </div>
         </div>
         <div class='video-canvas-container'>
@@ -499,7 +504,12 @@ const App = () => {
           <div class='grid-canvas'>
             <GridCanvas
               calibrating={calibrating} finishCalibrateCallback={finishCalibrate2}
-              mines={mines} />
+              mines={mines}
+              homePosition1={player1 ? player1.homePosition : null}
+              playerPosition1={player1 ? player1.position : null}
+              homePosition2={player2 ? player2.homePosition : null}
+              playerPosition2={player2 ? player2.position : null}
+            />
           </div>
         </div>
       </div>
