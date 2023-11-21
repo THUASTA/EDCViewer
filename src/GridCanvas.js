@@ -245,20 +245,28 @@ class Canvas {
                 let imgIndex = this.indexArray[index];
                 if (imgIndex !== -1)
                     ctx.drawImage(this.imageArray[imgIndex], coord[0] - a / 2, coord[1] - a / 2, a, a);
+                ctx.strokeStyle = 'black';
+                ctx.lineWidth = 1;
                 ctx.fillStyle = 'red';
                 let bar = Math.max(this.heightArray[index] - 4, 0);
-                ctx.moveTo(this.getPos(i, j)[0], this.getPos(i, j)[1]);
-                ctx.lineTo(this.getPos(i+0.2, j)[0], this.getPos(i+0.2, j)[1]);
-                ctx.lineTo(this.getPos(i+0.2, j+0.25*bar)[0], this.getPos(i+0.2, j+0.25*bar)[1]);
-                ctx.lineTo(this.getPos(i, j+0.25*bar)[0], this.getPos(i, j+0.25*bar)[1]);
-                ctx.fill();
+                for (let k=0; k<bar; k++) {
+                    ctx.moveTo(this.getPos(i, j+0.25*k)[0], this.getPos(i, j+0.25*k)[1]);
+                    ctx.lineTo(this.getPos(i+0.2, j+0.25*k)[0], this.getPos(i+0.2, j+0.25*k)[1]);
+                    ctx.lineTo(this.getPos(i+0.2, j+0.25*(k+1))[0], this.getPos(i+0.2, j+0.25*(k+1))[1]);
+                    ctx.lineTo(this.getPos(i, j+0.25*(k+1))[0], this.getPos(i, j+0.25*(k+1))[1]);
+                    ctx.fill();
+                    ctx.stroke();
+                }
                 ctx.fillStyle = 'green';
                 bar = Math.min(this.heightArray[index], 4);
-                ctx.moveTo(this.getPos(i+1, j)[0], this.getPos(i+1, j)[1]);
-                ctx.lineTo(this.getPos(i+0.8, j)[0], this.getPos(i+0.8, j)[1]);
-                ctx.lineTo(this.getPos(i+0.8, j+0.25*bar)[0], this.getPos(i+0.8, j+0.25*bar)[1]);
-                ctx.lineTo(this.getPos(i+1, j+0.25*bar)[0], this.getPos(i+1, j+0.25*bar)[1]);
-                ctx.fill();
+                for (let k=0; k<bar; k++) {
+                    ctx.moveTo(this.getPos(i+1, j+0.25*k)[0], this.getPos(i+1, j+0.25*k)[1]);
+                    ctx.lineTo(this.getPos(i+0.8, j+0.25*k)[0], this.getPos(i+0.8, j+0.25*k)[1]);
+                    ctx.lineTo(this.getPos(i+0.8, j+0.25*(k+1))[0], this.getPos(i+0.8, j+0.25*(k+1))[1]);
+                    ctx.lineTo(this.getPos(i+1, j+0.25*(k+1))[0], this.getPos(i+1, j+0.25*(k+1))[1]);
+                    ctx.fill();
+                    ctx.stroke();
+                }
             }
         }
     }
