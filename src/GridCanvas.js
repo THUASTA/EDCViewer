@@ -11,7 +11,7 @@ class Canvas {
         this.canvas.style.borderColor = 'Black';
         this.canvas.style.borderWidth = '1px';
         this.canvas.style.display = 'block';
-        this.clicktimes = 0;
+        this.clicktimes = 4;
         this.callback = callback;
         this.canvas.addEventListener('click', event => {
             if (this.clicktimes < 4) {
@@ -56,9 +56,6 @@ class Canvas {
         return ([(d * x - b * y) / inv, (a * y - c * x) / inv]);
     }
 
-    updata(indexArray) {
-        this.indexArray = indexArray;
-    }
 
     draw_corner(x, y) {
         if (this.corner.length === 4) {
@@ -220,6 +217,7 @@ class Canvas {
         let a;
         let width;
         let height;
+
         for (let i = 0; i < this.blockn; i++) {
             hStart = add(A, mul(v(A, D), (i + 0.5) / this.blockn));
             hEnd = add(B, mul(v(B, C), (i + 0.5) / this.blockn));
@@ -231,13 +229,15 @@ class Canvas {
                 coord = this.getIntersection(hStart[0], hStart[1], hEnd[0], hEnd[1], vStart[0], vStart[1], vEnd[0], vEnd[1]);
                 a = Math.min(width, height) * 0.8;
                 ctx.globalCompositeOperation = "destination-over";
-                ctx.drawImage(this.imageArray[this.indexArray[i * this.blockn + j]], coord[0] - a / 2, coord[1] - a / 2, a, a);
+                let index = this.indexArray[i * this.blockn + j];
+                if (index !== -1)
+                    ctx.drawImage(this.imageArray[index], coord[0] - a / 2, coord[1] - a / 2, a, a);
             }
         }
     }
 }
 
-const GridCanvas = ({ calibrating, finishCalibrateCallback }) => {
+const GridCanvas = ({ calibrating, finishCalibrateCallback, mines }) => {
     const canvasRef = useRef(null);
 
     let num = 8;
@@ -245,8 +245,7 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback }) => {
     let imageNum = 3;
     let imageArray = [];
     let loadNum = 0;
-    let srcArray = ["assets/2.png", "assets/3.png", "assets/4.png"];
-    let indexArray = [];
+    let srcArray = ["assets/iron_ingot.png", "assets/gold_ingot.png", "assets/diamond.png"];
 
     const gridCanvas = useRef(null);
     const tmpload = () => {
@@ -256,24 +255,43 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback }) => {
                 canvasRef.current,
                 width, width, 'c1',
                 num,
-                imageArray, indexArray,
+                imageArray, [...Array(num * num)].map(x => -1),
                 finishCalibrateCallback
             );
         }
     }
     useEffect(
         () => {
-            for (let i = 0; i < 81; i++) {
-                indexArray.push(i % 3)
-            }
             for (let i = 0; i < imageNum; i++) {
                 let temp = new Image();
                 temp.src = srcArray[i];
                 temp.onload = tmpload;
                 imageArray.push(temp);
             }
+        }, []
+    );
+    useEffect(
+        () => {
+            //for (let i = 0; i < 81; i++) {
+            //    indexArray.push(i % 3)
+            //}
+            console.log(mines);
+            if (gridCanvas.current) {
+                let indexArray = gridCanvas.current.indexArray;
+                indexArray.fill(-1);
+                mines.forEach(mine => {
+                    let x = parseInt(mine.position.x);
+                    let y = parseInt(mine.position.y);
+                    if (mine.oreType === 3)
+                        indexArray[y * num + x] = 0;
+                    else if (mine.oreType === 0)
+                        indexArray[y * num + x] = 1;
+                    else if (mine.oreType === 2)
+                        indexArray[y * num + x] = 2;
+                });
+            }
         },
-        []
+        [mines]
     );
 
     useEffect(

@@ -15,6 +15,8 @@ const App = () => {
   const [camera2, setCamera2] = useState(null);
   const [player1, setPlayer1] = useState(null);
   const [player2, setPlayer2] = useState(null);
+  const [mines, setMines] = useState([]);
+
   var coord1 = [];
   var coord2 = [];
   var calibrated1 = false;
@@ -240,10 +242,12 @@ const App = () => {
 
         // about the data format, see https://thuasta.github.io/EDCHost/api/viewer/
         if (data.messageType === 'COMPETITION_UPDATE') {
-          setCamera1(data.cameras.find((value) => value.cameraId === 1));
-          setCamera2(data.cameras.find((value) => value.cameraId === 2));
-          setPlayer1(data.players.find((value) => value.playerId === 1));
-          setPlayer2(data.players.find((value) => value.playerId === 2));
+          setCamera1(data.cameras.find((value) => value.cameraId === 0));
+          setCamera2(data.cameras.find((value) => value.cameraId === 1));
+          setPlayer1(data.players.find((value) => value.playerId === 0));
+          setPlayer2(data.players.find((value) => value.playerId === 1));
+
+          setMines(data.mines);
         }
 
         if (data.messageType === 'HOST_CONFIGURATION_FROM_SERVER') {
@@ -291,8 +295,6 @@ const App = () => {
             // port.value = newPorts[0].id; // 假设选择第一个摄像头作为默认值
           });
         }
-
-
       };
 
       ws.onclose = () => {
@@ -437,7 +439,8 @@ const App = () => {
           </div>
           <div class='grid-canvas'>
             <GridCanvas
-              calibrating={calibrating} finishCalibrateCallback={finishCalibrate1} />
+              calibrating={calibrating} finishCalibrateCallback={finishCalibrate1}
+              mines={mines} />
           </div>
         </div>
         <div class='video-canvas-container'>
@@ -452,7 +455,8 @@ const App = () => {
           </div>
           <div class='grid-canvas'>
             <GridCanvas
-              calibrating={calibrating} finishCalibrateCallback={finishCalibrate2} />
+              calibrating={calibrating} finishCalibrateCallback={finishCalibrate2}
+              mines={mines} />
           </div>
         </div>
       </div>
