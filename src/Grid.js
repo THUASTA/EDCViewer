@@ -220,7 +220,7 @@ class Canvas extends Component {
 const Grid = () => {
     console.log('Grid rendered');
     const num = 8;
-    const width = 600;
+    const width = 100;
     const imageNum = 3;
     var imageArray = [];
     var loadNum = 0;

@@ -30,7 +30,7 @@ const VideoStreamPlayer = ({ data, width, height }) => {
 
     return (
         <div>
-            <canvas ref={canvasRef} width={'100%'} height={'100%'} />
+            <canvas ref={canvasRef} width={'100%'} height={'100%'} className='video-stream-player'/>
         </div>
     );
 }
