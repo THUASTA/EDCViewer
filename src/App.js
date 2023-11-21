@@ -292,6 +292,43 @@ const App = () => {
               option.text = camera; // 假设摄像头对象有一个name属性
               cameraElement.add(option);
             });
+            const hueCenter1 = data.players[0].camera.recognition.hueCenter;
+            const hueRange1 = data.players[0].camera.recognition.hueRange;
+            const saturationCenter1 = data.players[0].camera.recognition.saturationCenter;
+            const saturationRange1 = data.players[0].camera.recognition.saturationRange;
+            const valueCenter1 = data.players[0].camera.recognition.valueCenter;
+            const valueRange1 = data.players[0].camera.recognition.valueRange;
+            const hueCenter2 = data.players[1].camera.recognition.hueCenter;
+            const hueRange2 = data.players[1].camera.recognition.hueRange;
+            const saturationCenter2 = data.players[1].camera.recognition.saturationCenter;
+            const saturationRange2 = data.players[1].camera.recognition.saturationRange;
+            const valueCenter2 = data.players[1].camera.recognition.valueCenter;
+            const valueRange2 = data.players[1].camera.recognition.valueRange;
+            const area1 = data.players[0].camera.recognition.minArea;
+            const area2 = data.players[1].camera.recognition.minArea;
+            const showMask1 = data.players[0].camera.recognition.showMask;
+            const showMask2 = data.players[1].camera.recognition.showMask;
+            const inputs = document.getElementsByClassName("color-value");
+            inputs[0].value = hueCenter1;
+            inputs[1].value = hueRange1;
+            inputs[2].value = saturationCenter1;
+            inputs[3].value = saturationRange1;
+            inputs[4].value = valueCenter1;
+            inputs[5].value = valueRange1;
+            inputs[6].value = hueCenter2;
+            inputs[7].value = hueRange2;
+            inputs[8].value = saturationCenter2;
+            inputs[9].value = saturationRange2;
+            inputs[10].value = valueCenter2;
+            inputs[11].value = valueRange2;
+            const areas = document.getElementsByClassName("area");
+            areas[0].value = area1;
+            areas[1].value = area2;
+            const masks = document.getElementsByClassName("show-mask");
+            masks[0].checked = showMask1;
+            masks[1].checked = showMask2;
+            // 如果需要，你还可以设置默认值
+            // port.value = newPorts[0].id; // 假设选择第一个摄像头作为默认值
           });
           const hueCenter1 = data.players[0].camera.recognition.hueCenter;
           const hueRange1 = data.players[0].camera.recognition.hueRange;
