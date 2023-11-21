@@ -26,8 +26,8 @@ const App = () => {
   var calibrated2 = false;
   var message = true;
 
-  var player1Camera = 0;
-  var player2Camera = 1;
+  var player1Camera = -1;
+  var player2Camera = -1;
 
   function nullOrDefault(inputValue, defaultValue) {
     if (inputValue === null || inputValue === undefined || isNaN(inputValue)) {
@@ -249,189 +249,181 @@ const App = () => {
 
   useEffect(
     () => {
-      if(!isOpen){
-      server = "ws://" + ipAddress
-      const ws = new WebSocket(server);
-      console.log('enter');
-      ws.onopen = () => {
-        console.log('WebSocket connected to ' + server);
-      };
-
-      ws.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-
-        // about the data format, see https://thuasta.github.io/EDCHost/api/viewer/
-        if (data.messageType === 'COMPETITION_UPDATE') {
-          setCamera1(data.cameras.find((value) => value.cameraId === player1Camera));
-          setCamera2(data.cameras.find((value) => value.cameraId === player2Camera));
-          setPlayer1(data.players.find((value) => value.playerId === 0));
-          setPlayer2(data.players.find((value) => value.playerId === 1));
-          setMines(data.mines);
-          // 这部分是生成随机矿石来测试
-
-          //let randIdx = parseInt((Date.parse(new Date())) / 1000) % 3;
-          //let randMines = [
-          //  [
-          //    { oreType: 1, position: { x: 2, y: 2 } },
-          //    { oreType: 1, position: { x: 3, y: 3 } },
-          //  ],
-          //  [
-          //    { oreType: 2, position: { x: 4, y: 4 } },
-          //    { oreType: 2, position: { x: 5, y: 5 } },
-          //  ],
-          //  [
-          //    { oreType: 0, position: { x: 6, y: 6 } },
-          //    { oreType: 0, position: { x: 7, y: 7 } },
-          //  ],
-          //]
-          //setMines(randMines[randIdx]);
-          setChunks(data.chunks);
-        }
-
-        if (data.messageType === 'HOST_CONFIGURATION_FROM_SERVER') {
-          console.log(data);
-          const ports = document.getElementsByClassName("port-select");
-          const cameras = document.getElementsByClassName("camera-select");
-          // 假设data.availableCameras是一个包含摄像头信息的数组
-          const newCameras = data.availableCameras;
-          const newPorts = data.availableSerialPorts;
-          // 遍历每个 "port-select" 元素
-          Array.from(ports).forEach((portElement, index) => {
-            // 清空当前选择框的选项
-            portElement.innerHTML = "";
-            // 创建port
-            const option = document.createElement("option");
-            option.value = ""; // 假设摄像头对象有一个id属性
-            option.text = ""; // 假设摄像头对象有一个name属性
-            portElement.add(option);
-            // 为选择框添加新的选项
-            newPorts.forEach((port) => {
-              const option = document.createElement("option");
-              option.value = port; // 假设摄像头对象有一个id属性
-              option.text = port; // 假设摄像头对象有一个name属性
-              portElement.add(option);
-            });
-
-            // 如果需要，你还可以设置默认值
-            // port.value = newPorts[0].id; // 假设选择第一个摄像头作为默认值
-          });
-
-          // 遍历每个 "port-select" 元素
-          Array.from(cameras).forEach((cameraElement, index) => {
-            // 清空当前选择框的选项
-            cameraElement.innerHTML = "";
-            // 创建空相机
-            const option = document.createElement("option");
-            option.value = ""; // 假设摄像头对象有一个id属性
-            option.text = ""; // 假设摄像头对象有一个name属性
-            cameraElement.add(option);
-            // 为选择框添加新的选项
-            newCameras.forEach((camera) => {
-              const option = document.createElement("option");
-              option.value = camera; // 假设摄像头对象有一个id属性
-              option.text = camera; // 假设摄像头对象有一个name属性
-              cameraElement.add(option);
-            });
-            // 如果需要，你还可以设置默认值
-            // port.value = newPorts[0].id; // 假设选择第一个摄像头作为默认值
-          });
-          const hueCenter1 = data.players[0].camera.recognition.hueCenter;
-          const hueRange1 = data.players[0].camera.recognition.hueRange;
-          const saturationCenter1 = data.players[0].camera.recognition.saturationCenter;
-          const saturationRange1 = data.players[0].camera.recognition.saturationRange;
-          const valueCenter1 = data.players[0].camera.recognition.valueCenter;
-          const valueRange1 = data.players[0].camera.recognition.valueRange;
-          const hueCenter2 = data.players[1].camera.recognition.hueCenter;
-          const hueRange2 = data.players[1].camera.recognition.hueRange;
-          const saturationCenter2 = data.players[1].camera.recognition.saturationCenter;
-          const saturationRange2 = data.players[1].camera.recognition.saturationRange;
-          const valueCenter2 = data.players[1].camera.recognition.valueCenter;
-          const valueRange2 = data.players[1].camera.recognition.valueRange;
-          const area1 = data.players[0].camera.recognition.minArea;
-          const area2 = data.players[1].camera.recognition.minArea;
-          const showMask1 = data.players[0].camera.recognition.showMask;
-          const showMask2 = data.players[1].camera.recognition.showMask;
-          const inputs = document.getElementsByClassName("color-value");
-          inputs[0].value = hueCenter1;
-          inputs[1].value = hueRange1;
-          inputs[2].value = saturationCenter1;
-          inputs[3].value = saturationRange1;
-          inputs[4].value = valueCenter1;
-          inputs[5].value = valueRange1;
-          inputs[6].value = hueCenter2;
-          inputs[7].value = hueRange2;
-          inputs[8].value = saturationCenter2;
-          inputs[9].value = saturationRange2;
-          inputs[10].value = valueCenter2;
-          inputs[11].value = valueRange2;
-          const areas = document.getElementsByClassName("area");
-          areas[0].value = area1;
-          areas[1].value = area2;
-          const masks = document.getElementsByClassName("show-mask");
-          masks[0].checked = showMask1;
-          masks[1].checked = showMask2;
-          // 如果需要，你还可以设置默认值
-          // port.value = newPorts[0].id; // 假设选择第一个摄像头作为默认值
-
-          // 更新player1Camera和player2Camera
-          player1Camera = data.players[0].camera.cameraId;
-          player2Camera = data.players[1].camera.cameraId;
+      if (!isOpen) {
+        server = "ws://" + ipAddress
+        const ws = new WebSocket(server);
+        console.log('enter');
+        ws.onopen = () => {
+          console.log('WebSocket connected to ' + server);
         };
-      };
 
-      ws.onclose = () => {
-        console.log('WebSocket disconnected');
-        gameState = "STANDBY";
-      };
-      const start = document.getElementById("startbutton");
-      const end = document.getElementById("endbutton");
-      const setting = document.getElementById("setting");
-      const canvas = document.getElementById("canvas");
-      setting.onclick = async () => {
+        ws.onmessage = (event) => {
+          const data = JSON.parse(event.data);
 
-        ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "GET_HOST_CONFIGURATION", token: "" }));
-
-        setTimeout(() => {
-          const confirm = document.getElementById("confirmbutton");
-          confirm.onclick = () => {
-            if (calibrated1 && calibrated2) {
-              ws.send(JSON.stringify(data2()));
-              console.log('send data2');
-            }
-            else {
-              ws.send(JSON.stringify(data1()));
-              console.log('send data1');
-            }
+          // about the data format, see https://thuasta.github.io/EDCHost/api/viewer/
+          if (data.messageType === 'COMPETITION_UPDATE') {
+            setCamera1(data.cameras.find((value) => value.cameraId === player1Camera));
+            setCamera2(data.cameras.find((value) => value.cameraId === player2Camera));
+            setPlayer1(data.players.find((value) => value.playerId === 0));
+            setPlayer2(data.players.find((value) => value.playerId === 1));
+            setMines(data.mines);
+            setChunks(data.chunks);
           }
-        }, 1000)
 
-      }
+          if (data.messageType === 'HOST_CONFIGURATION_FROM_SERVER') {
+            console.log(data);
+            const ports = document.getElementsByClassName("port-select");
+            const cameras = document.getElementsByClassName("camera-select");
+            // 假设data.availableCameras是一个包含摄像头信息的数组
+            const newCameras = data.availableCameras;
+            const newPorts = data.availableSerialPorts;
+            // 遍历每个 "port-select" 元素
+            Array.from(ports).forEach((portElement, index) => {
+              // 清空当前选择框的选项
+              portElement.innerHTML = "";
+              // 创建port
+              const option = document.createElement("option");
+              option.value = ""; // 假设摄像头对象有一个id属性
+              option.text = ""; // 假设摄像头对象有一个name属性
+              portElement.add(option);
+              // 为选择框添加新的选项
+              newPorts.forEach((port) => {
+                const option = document.createElement("option");
+                option.value = port; // 假设摄像头对象有一个id属性
+                option.text = port; // 假设摄像头对象有一个name属性
+                portElement.add(option);
+              });
 
-      start.onclick = () => {
-        if (gameState === "STANDBY") {
-          ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "START", token: "" }));
-          gameState = "RUNNING";
-        }
-        else if (gameState === "ENDED") {
-          ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "RESET", token: "" }));
+              // 如果需要，你还可以设置默认值
+              // port.value = newPorts[0].id; // 假设选择第一个摄像头作为默认值
+            });
+
+            // 遍历每个 "port-select" 元素
+            Array.from(cameras).forEach((cameraElement, index) => {
+              // 清空当前选择框的选项
+              cameraElement.innerHTML = "";
+              // 创建空相机
+              const option = document.createElement("option");
+              option.value = ""; // 假设摄像头对象有一个id属性
+              option.text = ""; // 假设摄像头对象有一个name属性
+              cameraElement.add(option);
+              // 为选择框添加新的选项
+              newCameras.forEach((camera) => {
+                const option = document.createElement("option");
+                option.value = camera; // 假设摄像头对象有一个id属性
+                option.text = camera; // 假设摄像头对象有一个name属性
+                cameraElement.add(option);
+              });
+              // 如果需要，你还可以设置默认值
+              // port.value = newPorts[0].id; // 假设选择第一个摄像头作为默认值
+            });
+            let hueCenter1 = 0, hueRange1 = 0, saturationCenter1 = 0, saturationRange1 = 0, valueCenter1 = 0, valueRange1 = 0, area1 = 0, showMask1 = false;
+
+            if (data.players[0].camera !== undefined) {
+              hueCenter1 = data.players[0].camera.recognition.hueCenter;
+              hueRange1 = data.players[0].camera.recognition.hueRange;
+              saturationCenter1 = data.players[0].camera.recognition.saturationCenter;
+              saturationRange1 = data.players[0].camera.recognition.saturationRange;
+              valueCenter1 = data.players[0].camera.recognition.valueCenter;
+              valueRange1 = data.players[0].camera.recognition.valueRange;
+              area1 = data.players[0].camera.recognition.minArea;
+              showMask1 = data.players[0].camera.recognition.showMask;
+              player1Camera = data.players[0].camera.cameraId;
+            }
+
+            let hueCenter2 = 0, hueRange2 = 0, saturationCenter2 = 0, saturationRange2 = 0, valueCenter2 = 0, valueRange2 = 0, area2 = 0, showMask2 = false;
+            if (data.players[1].camera !== undefined) {
+              hueCenter2 = data.players[1].camera.recognition.hueCenter;
+              hueRange2 = data.players[1].camera.recognition.hueRange;
+              saturationCenter2 = data.players[1].camera.recognition.saturationCenter;
+              saturationRange2 = data.players[1].camera.recognition.saturationRange;
+              valueCenter2 = data.players[1].camera.recognition.valueCenter;
+              valueRange2 = data.players[1].camera.recognition.valueRange;
+              area2 = data.players[1].camera.recognition.minArea;
+              showMask2 = data.players[1].camera.recognition.showMask;
+              player2Camera = data.players[1].camera.cameraId;
+            }
+
+            const inputs = document.getElementsByClassName("color-value");
+            inputs[0].value = hueCenter1;
+            inputs[1].value = hueRange1;
+            inputs[2].value = saturationCenter1;
+            inputs[3].value = saturationRange1;
+            inputs[4].value = valueCenter1;
+            inputs[5].value = valueRange1;
+            inputs[6].value = hueCenter2;
+            inputs[7].value = hueRange2;
+            inputs[8].value = saturationCenter2;
+            inputs[9].value = saturationRange2;
+            inputs[10].value = valueCenter2;
+            inputs[11].value = valueRange2;
+            const areas = document.getElementsByClassName("area");
+            areas[0].value = area1;
+            areas[1].value = area2;
+            const masks = document.getElementsByClassName("show-mask");
+            masks[0].checked = showMask1;
+            masks[1].checked = showMask2;
+            // 如果需要，你还可以设置默认值
+            // port.value = newPorts[0].id; // 假设选择第一个摄像头作为默认值
+
+            // 更新player1Camera和player2Camera
+          };
+        };
+
+        ws.onclose = () => {
+          console.log('WebSocket disconnected');
           gameState = "STANDBY";
+        };
+        const start = document.getElementById("startbutton");
+        const end = document.getElementById("endbutton");
+        const setting = document.getElementById("setting");
+        const canvas = document.getElementById("canvas");
+        setting.onclick = async () => {
+
+          ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "GET_HOST_CONFIGURATION", token: "" }));
+
+          setTimeout(() => {
+            const confirm = document.getElementById("confirmbutton");
+            confirm.onclick = () => {
+              if (calibrated1 && calibrated2) {
+                ws.send(JSON.stringify(data2()));
+                console.log('send data2');
+              }
+              else {
+                ws.send(JSON.stringify(data1()));
+                console.log('send data1');
+              }
+            }
+          }, 1000)
+
         }
-      }
-      end.onclick = () => {
-        ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "END", token: "" }));
-        gameState = "ENDED";
-      }
-      canvas.onclick = () => {
-        if (calibrated1 && calibrated2 && message && data2 != null) {
-          ws.send(JSON.stringify(data2()));
-          message = false;
-          console.log('send data2');
+
+        start.onclick = () => {
+          if (gameState === "STANDBY") {
+            ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "START", token: "" }));
+            gameState = "RUNNING";
+          }
+          else if (gameState === "ENDED") {
+            ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "RESET", token: "" }));
+            gameState = "STANDBY";
+          }
         }
+        end.onclick = () => {
+          ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "END", token: "" }));
+          gameState = "ENDED";
+        }
+        canvas.onclick = () => {
+          if (calibrated1 && calibrated2 && message && data2 != null) {
+            ws.send(JSON.stringify(data2()));
+            message = false;
+            console.log('send data2');
+          }
+        }
+        return () => {
+          ws.close(); // close the WebSocket connection when the component is unmounted
+        };
       }
-      return () => {
-        ws.close(); // close the WebSocket connection when the component is unmounted
-      };
-    }},
+    },
     [isOpen]
   );
 
@@ -465,23 +457,23 @@ const App = () => {
   return (
     <div class='app-container'>
       <>
-      {isOpen && (
-        <div className="dialog-overlay">
-          <div className="dialog">
-            <h2>请输入您的IP地址</h2>
-            <input
-              type="text"
-              value={ipAddress}
-              onChange={(e) => setIPAddress(e.target.value)}
-              placeholder="IP:Port"
-            />
-            <div className="button-container">
-              <button onClick={handleConfirm}>确认</button>
+        {isOpen && (
+          <div className="dialog-overlay">
+            <div className="dialog">
+              <h2>请输入您的IP地址</h2>
+              <input
+                type="text"
+                value={ipAddress}
+                onChange={(e) => setIPAddress(e.target.value)}
+                placeholder="IP:Port"
+              />
+              <div className="button-container">
+                <button onClick={handleConfirm}>确认</button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </>
+        )}
+      </>
       <div class='top'>
         <div class='control-buttons-container'>
           <div class='control-buttons-row'>
