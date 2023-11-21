@@ -337,6 +337,7 @@ const App = () => {
 
       ws.onclose = () => {
         console.log('WebSocket disconnected');
+        gameState = "STANDBY";
       };
       const start = document.getElementById("startbutton");
       const end = document.getElementById("endbutton");
