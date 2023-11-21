@@ -15,8 +15,12 @@ class Canvas {
         this.callback = callback;
         this.canvas.addEventListener('click', event => {
             if (this.clicktimes < 4) {
-                let x = event.offsetX;
-                let y = event.offsetY;
+
+                let bbox = canvas.getBoundingClientRect();
+                // let x = event.clientX - bbox.left*(canvas.width/bbox.width);
+                // let y = event.clientY - bbox.top*(canvas.height/bbox.height);
+                let x = event.offsetX*(canvas.width/bbox.width);
+                let y = event.offsetY*(canvas.height/bbox.height);
                 this.draw_corner(x, y);
                 this.clicktimes++;
                 if (this.clicktimes === 4) {
@@ -241,7 +245,7 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines }) => {
     const canvasRef = useRef(null);
 
     let num = 8;
-    let width = 600;
+    let width = 800;
     let imageNum = 3;
     let imageArray = [];
     let loadNum = 0;
@@ -253,7 +257,7 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines }) => {
         if (loadNum === imageNum) {
             gridCanvas.current = new Canvas(
                 canvasRef.current,
-                width, width, 'c1',
+                width, width*0.75, 'c1',
                 num,
                 imageArray, [...Array(num * num)].map(x => -1),
                 finishCalibrateCallback
@@ -303,7 +307,7 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines }) => {
     );
 
     return (
-        <canvas ref={canvasRef} />
+        <canvas ref={canvasRef} className='grid-canvas'/>
     )
 }
 
