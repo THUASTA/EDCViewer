@@ -81,8 +81,8 @@ const App = () => {
               }
             },
             serialPort: {
-              port: port1,
-              baudrate: baudrate1
+              portName: port1,
+              baudRate: baudrate1
             }
           },
           {
@@ -101,13 +101,14 @@ const App = () => {
               }
             },
             serialPort: {
-              port: port2,
-              baudrate: baudrate2
+              portName: port2,
+              baudRate: baudrate2
             }
 
           }
         ]
       }
+      console.log(data1);
       return data1;
     }
     catch {
