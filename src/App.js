@@ -54,9 +54,6 @@ const App = () => {
       const ports = document.getElementsByClassName("port-select");
       const port1 = ports[0].value;
       const port2 = ports[1].value;
-
-      console.log(port1 === "");
-      console.log(port2 === "");
       // console.log(port1);
       const masks = document.getElementsByClassName("show-mask");
       const mask1 = masks[0].checked;
@@ -70,7 +67,7 @@ const App = () => {
         players: [
           {
             playerId: 0,
-            camera: camera1 === "" ? undefined : {
+            camera: {
               cameraId: camera1,
               recognition: {
                 hueCenter: hueCenter1,
@@ -83,14 +80,14 @@ const App = () => {
                 showMask: mask1
               }
             },
-            serialPort: port1 === "" ? undefined : {
-              portName: port1,
-              baudRate: baudrate1
+            serialPort: {
+              port: port1,
+              baudrate: baudrate1
             }
           },
           {
             playerId: 1,
-            camera: camera2 === "" ? undefined : {
+            camera: {
               cameraId: camera2,
               recognition: {
                 hueCenter: hueCenter2,
@@ -103,15 +100,14 @@ const App = () => {
                 showMask: mask2
               }
             },
-            serialPort: port2 === "" ? undefined : {
-              portName: port2,
-              baudRate: baudrate2
+            serialPort: {
+              port: port2,
+              baudrate: baudrate2
             }
 
           }
         ]
       }
-      console.log(data1);
       return data1;
     }
     catch {
@@ -142,7 +138,6 @@ const App = () => {
       const ports = document.getElementsByClassName("port-select");
       const port1 = ports[0].value;
       const port2 = ports[1].value;
-
       const masks = document.getElementsByClassName("show-mask");
       const mask1 = masks[0].checked;
       const mask2 = masks[1].checked;
@@ -157,7 +152,7 @@ const App = () => {
         players: [
           {
             playerId: 0,
-            camera: camera1 === "" ? undefined : {
+            camera: {
               cameraId: camera1,
               calibration: {
                 topLeft: {
@@ -188,14 +183,14 @@ const App = () => {
                 showMask: mask1
               }
             },
-            serialPort: port1 === "" ? undefined : {
+            serialPort: {
               port: port1,
               baudrate: baudrate1
             }
           },
           {
             playerId: 1,
-            camera: camera2 === "" ? undefined : {
+            camera: {
               cameraId: camera2,
               calibration: {
                 topLeft: {
@@ -226,7 +221,7 @@ const App = () => {
                 showMask: mask2
               }
             },
-            serialPort: port2 === "" ? undefined : {
+            serialPort: {
               port: port2,
               baudrate: baudrate2
             }
@@ -250,7 +245,7 @@ const App = () => {
 
       ws.onmessage = (event) => {
         const data = JSON.parse(event.data);
-
+        
         // about the data format, see https://thuasta.github.io/EDCHost/api/viewer/
         if (data.messageType === 'COMPETITION_UPDATE') {
           setCamera1(data.cameras.find((value) => value.cameraId === 0));
@@ -276,11 +271,6 @@ const App = () => {
           Array.from(ports).forEach((portElement, index) => {
             // 清空当前选择框的选项
             portElement.innerHTML = "";
-            // 创建port
-            const option = document.createElement("option");
-            option.value = ""; // 假设摄像头对象有一个id属性
-            option.text = ""; // 假设摄像头对象有一个name属性
-            portElement.add(option);
 
             // 为选择框添加新的选项
             newPorts.forEach((port) => {
@@ -298,11 +288,6 @@ const App = () => {
           Array.from(cameras).forEach((cameraElement, index) => {
             // 清空当前选择框的选项
             cameraElement.innerHTML = "";
-            // 创建空相机
-            const option = document.createElement("option");
-            option.value = ""; // 假设摄像头对象有一个id属性
-            option.text = ""; // 假设摄像头对象有一个name属性
-            cameraElement.add(option);
 
             // 为选择框添加新的选项
             newCameras.forEach((camera) => {
@@ -486,42 +471,49 @@ const App = () => {
       </div>
       <div class='flex' id="canvas">
         <div class='video-canvas-container'>
-          {camera1 ?
-            <VideoStreamPlayer
-              data={camera1.frameData}
-              width={camera1.width}
-              height={camera1.height}
+          <div class='video-stream-player'>
+            {camera1 ?
+              <VideoStreamPlayer
+                data={camera1.frameData}
+                width={camera1.width}
+                height={camera1.height}
+              />
+              : <></>}
+          </div>
+          <div class='grid-canvas'>
+            <GridCanvas
+              calibrating={calibrating} finishCalibrateCallback={finishCalibrate1}
+              mines={mines}
+              homePosition1={player1 ? player1.homePosition : null}
+              playerPosition1={player1 ? player1.position : null}
+              homePosition2={player2 ? player2.homePosition : null}
+              playerPosition2={player2 ? player2.position : null}
             />
-            : <></>}
-          <GridCanvas
-            calibrating={calibrating} finishCalibrateCallback={finishCalibrate1}
-            mines={mines}
-            homePosition1={player1 ? player1.homePosition : null}
-            playerPosition1={player1 ? player1.position : null}
-            homePosition2={player2 ? player2.homePosition : null}
-            playerPosition2={player2 ? player2.position : null}
-          />
+          </div>
+        </div>
+        <div class='video-canvas-container'>
+          <div class='video-stream-player'>
+            {camera2 ?
+              <VideoStreamPlayer
+                data={camera2.frameData}
+                width={camera2.width}
+                height={camera2.height}
+              />
+              : <></>}
+          </div>
+          <div class='grid-canvas'>
+            <GridCanvas
+              calibrating={calibrating} finishCalibrateCallback={finishCalibrate2}
+              mines={mines}
+              homePosition1={player1 ? player1.homePosition : null}
+              playerPosition1={player1 ? player1.position : null}
+              homePosition2={player2 ? player2.homePosition : null}
+              playerPosition2={player2 ? player2.position : null}
+            />
+          </div>
         </div>
       </div>
-      <div class='video-canvas-container'>
-        {camera2 ?
-          <VideoStreamPlayer
-            data={camera2.frameData}
-            width={camera2.width}
-            height={camera2.height}
-          />
-          : <></>}
-        <GridCanvas
-          calibrating={calibrating} finishCalibrateCallback={finishCalibrate2}
-          mines={mines}
-          homePosition1={player1 ? player1.homePosition : null}
-          playerPosition1={player1 ? player1.position : null}
-          homePosition2={player2 ? player2.homePosition : null}
-          playerPosition2={player2 ? player2.position : null}
-        />
-      </div>
     </div>
-
   )
 }
 
