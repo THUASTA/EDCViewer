@@ -56,8 +56,8 @@ const App = () => {
       const area1 = nullOrDefault(parseInt(areas[0].value));
       const area2 = nullOrDefault(parseInt(areas[1].value));
       const cameras = document.getElementsByClassName("camera-select");
-      const camera1 = Number(cameras[0].value);
-      const camera2 = Number(cameras[1].value);
+      const camera1 = cameras[0].value === "" ? null : Number(cameras[0].value);
+      const camera2 = cameras[1].value === "" ? null : Number(cameras[1].value);
       const ports = document.getElementsByClassName("port-select");
       const port1 = ports[0].value;
       const port2 = ports[1].value;
@@ -74,7 +74,7 @@ const App = () => {
         players: [
           {
             playerId: 0,
-            camera: camera1 === "" ? undefined : {
+            camera: camera1 === null ? undefined : {
               cameraId: camera1,
               recognition: {
                 hueCenter: hueCenter1,
@@ -94,7 +94,7 @@ const App = () => {
           },
           {
             playerId: 1,
-            camera: camera2 === "" ? undefined : {
+            camera: camera2 === null ? undefined : {
               cameraId: camera2,
               recognition: {
                 hueCenter: hueCenter2,
@@ -115,8 +115,9 @@ const App = () => {
           }
         ]
       }
-      if (camera1 !== "") player1Camera = camera1;
-      if (camera2 !== "") player2Camera = camera2;
+      player1Camera = camera1;
+      player2Camera = camera2;
+      console.log(data1);
       return data1;
     }
     catch {
@@ -142,8 +143,8 @@ const App = () => {
       const area1 = nullOrDefault(parseInt(areas[0].value), 0);
       const area2 = nullOrDefault(parseInt(areas[1].value), 0);
       const cameras = document.getElementsByClassName("camera-select");
-      const camera1 = Number(cameras[0].value);
-      const camera2 = Number(cameras[1].value);
+      const camera1 = cameras[0].value === "" ? null : Number(cameras[0].value);
+      const camera2 = cameras[1].value === "" ? null : Number(cameras[1].value);
       const ports = document.getElementsByClassName("port-select");
       const port1 = ports[0].value;
       const port2 = ports[1].value;
@@ -161,7 +162,7 @@ const App = () => {
         players: [
           {
             playerId: 0,
-            camera: camera1 === "" ? undefined : {
+            camera: camera1 === null ? undefined : {
               cameraId: camera1,
               calibration: {
                 topLeft: {
@@ -199,7 +200,7 @@ const App = () => {
           },
           {
             playerId: 1,
-            camera: camera2 === "" ? undefined : {
+            camera: camera2 === null ? undefined : {
               cameraId: camera2,
               calibration: {
                 topLeft: {
@@ -237,8 +238,8 @@ const App = () => {
           }
         ]
       }
-      if (camera1 !== "") player1Camera = camera1;
-      if (camera2 !== "") player2Camera = camera2;
+      player1Camera = camera1;
+      player2Camera = camera2;
 
       return data2;
     }
