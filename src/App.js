@@ -8,6 +8,11 @@ import VideoStreamPlayer from './VideoStreamPlayer';
 import SettingsItem from './SettingsItem';
 import GridCanvas from './GridCanvas';
 var server = 'ws://localhost:8080'
+var calibrated1 = false;
+var calibrated2 = false;
+
+var coord1 = [];
+var coord2 = [];
 
 const App = () => {
   var gameState = "STANDBY";
@@ -20,11 +25,7 @@ const App = () => {
   const [ipAddress, setIPAddress] = useState('');
   const [isOpen, setIsOpen] = useState(true);
 
-  var coord1 = [];
-  var coord2 = [];
-  var calibrated1 = false;
-  var calibrated2 = false;
-  var message = true;
+
 
   var player1Camera = -1;
   var player2Camera = -1;
@@ -241,9 +242,13 @@ const App = () => {
       player1Camera = camera1;
       player2Camera = camera2;
 
+      console.log('send data2');
+      console.log(data2);
       return data2;
     }
-    catch {
+    catch (e) {
+
+      console.log(e);
       return null;
     }
   }
@@ -414,9 +419,9 @@ const App = () => {
           gameState = "ENDED";
         }
         canvas.onclick = () => {
-          if (calibrated1 && calibrated2 && message && data2 != null) {
+          if (calibrated1 && calibrated2) {
             ws.send(JSON.stringify(data2()));
-            message = false;
+            // message = false;
             console.log('send data2');
           }
         }
