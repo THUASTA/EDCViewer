@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
 class Canvas {
-    constructor(canvas, width, height, id, blockn, imageArray, indexArray, heightArray, callback) {
+    constructor(canvas, width, height, id, blockn, imageArray, indexArray, heightArray, callback, playerPosition1, playerPosition2) {
         this.id = id;
         this.canvas = canvas;
         this.canvas.id = 'canvas_' + id;
@@ -13,6 +13,8 @@ class Canvas {
         this.canvas.style.display = 'block';
         this.clicktimes = 4;
         this.callback = callback;
+        this.playerPosition1 = playerPosition1;
+        this.playerPosition2 = playerPosition2;
         this.canvas.addEventListener('click', event => {
             if (this.clicktimes < 4) {
 
@@ -235,35 +237,46 @@ class Canvas {
         let a, width, height;
 
         for (let i = 0; i < this.blockn; i++) {
-           width = parseInt(((this.blockn - i) * Math.abs(v(A, B)[0]) + i * Math.abs(v(D, C)[0])) / this.blockn / this.blockn);
+            width = parseInt(((this.blockn - i) * Math.abs(v(A, B)[0]) + i * Math.abs(v(D, C)[0])) / this.blockn / this.blockn);
             for (let j = 0; j < this.blockn; j++) {
                 let index = i * this.blockn + j
-                let coord = this.getPos(i+0.5, j+0.5);
+                let coord = this.getPos(i + 0.5, j + 0.5);
                 height = parseInt(((this.blockn - j) * Math.abs(v(A, D)[1]) + j * Math.abs(v(B, C)[1])) / this.blockn / this.blockn);
                 a = Math.min(width, height) * 0.75;
                 ctx.globalCompositeOperation = "destination-over";
                 let imgIndex = this.indexArray[index];
-                if (imgIndex !== -1)
-                    ctx.drawImage(this.imageArray[imgIndex], coord[0] - a / 2, coord[1] - a / 2, a, a);
+
+                if (imgIndex !== -1) {
+                    if (imgIndex !== 3 || imgIndex !== 4) {
+                        ctx.drawImage(this.imageArray[imgIndex], coord[0] - a / 2, coord[1] - a / 2, a, a);
+                    }
+                    else if (imgIndex === 3) {
+                        ctx.drawImage(this.imageArray[3], this.playerPosition1.x - a / 2, this.playerPosition1.y - a / 2, a, a);
+                        console.log("playerPosition1: ", this.playerPosition1.x - a / 2, this.playerPosition1.y - a / 2);
+                    }
+                    else if (imgIndex === 4) {
+                        ctx.drawImage(this.imageArray[4], this.playerPosition2.x - a / 2, this.playerPosition2.y - a / 2, a, a);
+                    }
+                }
                 ctx.strokeStyle = 'black';
                 ctx.lineWidth = 1;
                 ctx.fillStyle = 'red';
                 let bar = Math.max(this.heightArray[index] - 4, 0);
-                for (let k=0; k<bar; k++) {
-                    ctx.moveTo(this.getPos(i, j+0.25*k)[0], this.getPos(i, j+0.25*k)[1]);
-                    ctx.lineTo(this.getPos(i+0.2, j+0.25*k)[0], this.getPos(i+0.2, j+0.25*k)[1]);
-                    ctx.lineTo(this.getPos(i+0.2, j+0.25*(k+1))[0], this.getPos(i+0.2, j+0.25*(k+1))[1]);
-                    ctx.lineTo(this.getPos(i, j+0.25*(k+1))[0], this.getPos(i, j+0.25*(k+1))[1]);
+                for (let k = 0; k < bar; k++) {
+                    ctx.moveTo(this.getPos(i, j + 0.25 * k)[0], this.getPos(i, j + 0.25 * k)[1]);
+                    ctx.lineTo(this.getPos(i + 0.2, j + 0.25 * k)[0], this.getPos(i + 0.2, j + 0.25 * k)[1]);
+                    ctx.lineTo(this.getPos(i + 0.2, j + 0.25 * (k + 1))[0], this.getPos(i + 0.2, j + 0.25 * (k + 1))[1]);
+                    ctx.lineTo(this.getPos(i, j + 0.25 * (k + 1))[0], this.getPos(i, j + 0.25 * (k + 1))[1]);
                     ctx.fill();
                     ctx.stroke();
                 }
                 ctx.fillStyle = 'green';
                 bar = Math.min(this.heightArray[index], 4);
-                for (let k=0; k<bar; k++) {
-                    ctx.moveTo(this.getPos(i+1, j+0.25*k)[0], this.getPos(i+1, j+0.25*k)[1]);
-                    ctx.lineTo(this.getPos(i+0.8, j+0.25*k)[0], this.getPos(i+0.8, j+0.25*k)[1]);
-                    ctx.lineTo(this.getPos(i+0.8, j+0.25*(k+1))[0], this.getPos(i+0.8, j+0.25*(k+1))[1]);
-                    ctx.lineTo(this.getPos(i+1, j+0.25*(k+1))[0], this.getPos(i+1, j+0.25*(k+1))[1]);
+                for (let k = 0; k < bar; k++) {
+                    ctx.moveTo(this.getPos(i + 1, j + 0.25 * k)[0], this.getPos(i + 1, j + 0.25 * k)[1]);
+                    ctx.lineTo(this.getPos(i + 0.8, j + 0.25 * k)[0], this.getPos(i + 0.8, j + 0.25 * k)[1]);
+                    ctx.lineTo(this.getPos(i + 0.8, j + 0.25 * (k + 1))[0], this.getPos(i + 0.8, j + 0.25 * (k + 1))[1]);
+                    ctx.lineTo(this.getPos(i + 1, j + 0.25 * (k + 1))[0], this.getPos(i + 1, j + 0.25 * (k + 1))[1]);
                     ctx.fill();
                     ctx.stroke();
                 }
@@ -272,9 +285,9 @@ class Canvas {
     }
 }
 
-const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, chunks , homePosition1, playerPosition1, homePosition2, playerPosition2 }) => {
+const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, chunks, homePosition1, playerPosition1, homePosition2, playerPosition2 }) => {
     const canvasRef = useRef(null);
-    
+
     let num = 8;
     let width = 600;
     let imageArray = [];
@@ -284,6 +297,8 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, chunks , home
 
     const indexArrayRef = useRef([...Array(num * num)].map(() => -1));
     const heightArrayRef = useRef([...Array(num * num)].map(() => 0));
+    if (playerPosition1 != null)
+        console.log("player1:", playerPosition1.x, playerPosition1.y);
 
     const gridCanvas = useRef(null);
     const tmpload = () => {
@@ -296,7 +311,9 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, chunks , home
                 imageArray,
                 [...Array(num * num)].map(() => -1),
                 [...Array(num * num)].map(() => 0),
-                finishCalibrateCallback
+                finishCalibrateCallback,
+                playerPosition1,
+                playerPosition2
             );
         }
     }
