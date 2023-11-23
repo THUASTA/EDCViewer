@@ -1,0 +1,55 @@
+on:
+  release:
+    types: 
+      - published
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - run: |
+          npm ci
+
+      - run: |
+          npm run build
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: edcviewer-${{ github.sha }}
+          path: build
+          
+  upload-to-release:
+    needs:
+      - build
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: edcviewer-${{ github.sha }}
+          path: build
+
+      - run: |
+          cp CHANGELOG.md LICENSE README.md build/
+
+      - name: Pack build
+        run: |
+          cd build
+          zip -r ../edcviewer.zip *
+          cd ..
+
+
+      - uses: softprops/action-gh-release@v1
+        with:
+          append_body: true
+          files: |
+            edcviewer.zip
