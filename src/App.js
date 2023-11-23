@@ -14,8 +14,6 @@ var calibrated2 = false;
 var coord1 = [];
 var coord2 = [];
 
-let position1 = { x: 2, y: 2 };
-let position2 = { x: 5, y: 5 };
 
 const App = () => {
   var gameState = "STANDBY";
