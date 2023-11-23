@@ -270,8 +270,37 @@ const App = () => {
           if (data.messageType === 'COMPETITION_UPDATE') {
             setCamera1(data.cameras.find((value) => value.cameraId === player1Camera));
             setCamera2(data.cameras.find((value) => value.cameraId === player2Camera));
-            setPlayer1(data.players.find((value) => value.playerId === 0));
-            setPlayer2(data.players.find((value) => value.playerId === 1));
+            
+            let position1 = { x: 0, y: 0 };
+            let position2 = { x: 0, y: 0 };
+
+            if (player1)
+              position1 = player1.position;
+            if (player2)
+              position2 = player2.position;
+            
+            let p1 = data.players.find((value) => value.playerId === 0);
+            let p2 = data.players.find((value) => value.playerId === 1);
+            
+            // 测试代码
+            // 生成随机玩家坐标
+            let timestamp = new Date().getTime();
+            let need_regenerate_player_coord = (timestamp % 100 === 0);
+            
+            if (need_regenerate_player_coord) {
+              p1.position.x = Math.random() * 8;
+              p1.position.y = Math.random() * 8;
+              p2.position.x = Math.random() * 8;
+              p2.position.y = Math.random() * 8;
+            }
+            else {
+              p1.position = position1;
+              p2.position = position2;
+            }
+            
+            setPlayer1(p1);
+            setPlayer2(p2);            
+            
             setMines(data.mines);
             setChunks(data.chunks);
           }
