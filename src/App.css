@@ -76,19 +76,12 @@
 
 .video-canvas-container {
   position: relative;
-  width: 50%;
+  width: 49%;
 }
 
 .video-stream-player {
   position: absolute;
   width: 100%;
   left: 0%;
-  top: 0;
-}
-
-.grid-canvas {
-  position: absolute;
-  width:100%;
-  left: 0;
   top: 0;
 }

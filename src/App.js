@@ -278,12 +278,13 @@ const App = () => {
             // 生成随机玩家坐标
             let timestamp = new Date().getTime();
             let need_regenerate_player_coord = (timestamp % 100 === 0);
+            need_regenerate_player_coord = true;
             
             let invalid = (x) => x < 0 || x > 8;
             let rand_step = (x) => {
               let rand_step;
               do {
-                rand_step = Math.random() * 0.5 - 0.25;
+                rand_step = Math.random() * 0.1 - 0.05;
               } while (invalid(x + rand_step));
               return rand_step;
             };
@@ -293,6 +294,7 @@ const App = () => {
               position1.y += rand_step(position1.y);
               position2.x += rand_step(position2.x);
               position2.y += rand_step(position2.y);
+              console.log("Random");
             }
 
             let p1 = data.players.find((value) => value.playerId === 0);
@@ -302,8 +304,8 @@ const App = () => {
             p2.position = position2;
                         
             setPlayer1(p1);
-            setPlayer2(p2);            
-            
+            setPlayer2(p2);
+            console.log("Generate" , position1, position2);
             setMines(data.mines);
             setChunks(data.chunks);
           }
@@ -573,7 +575,7 @@ const App = () => {
               />
               : <></>}
           </div>
-          <div class='grid-canvas'>
+          <div class='grid-canvas-container'>
             <GridCanvas
               calibrating={calibrating}
               finishCalibrateCallback={finishCalibrate1}
@@ -596,7 +598,7 @@ const App = () => {
               />
               : <></>}
           </div>
-          <div class='grid-canvas'>
+          <div class='grid-canvas-container'>
             <GridCanvas
               calibrating={calibrating}
               finishCalibrateCallback={finishCalibrate2}

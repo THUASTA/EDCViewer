@@ -1,28 +1,33 @@
 import React, { useEffect, useRef } from 'react';
+import './GridCanvas.css'
 
 class Canvas {
-    constructor(canvas, width, height, id, blockn, imageArray, indexArray, heightArray, callback, playerPosition1, playerPosition2) {
-        this.id = id;
-        this.canvas = canvas;
-        this.canvas.id = 'canvas_' + id;
-        this.canvas.width = width;
-        this.canvas.height = height;
-        this.canvas.style.border = 'solid';
-        this.canvas.style.borderColor = 'Black';
-        this.canvas.style.borderWidth = '1px';
-        this.canvas.style.display = 'block';
+    constructor(gridLayer, logoLayer, heightLayer, playerLayer, controlLayer,
+        width, height, blockn,
+        imageArray, indexArray, heightArray, callback, playerPosition1, playerPosition2) {
+        this.layers = [
+            this.gridLayer=gridLayer,
+            this.logoLayer=logoLayer,
+            this.heightLayer=heightLayer,
+            this.playerLayer=playerLayer,
+            this.controlLayer=controlLayer,
+        ];
+        this.layers.forEach(layer => {
+            // Emm, just like screen resolution?
+            layer.width = width;
+            layer.height = height;
+        });
         this.clicktimes = 4;
         this.callback = callback;
         this.playerPosition1 = playerPosition1;
         this.playerPosition2 = playerPosition2;
-        this.canvas.addEventListener('click', event => {
+        this.controlLayer.addEventListener('click', event => {
             if (this.clicktimes < 4) {
-
-                let bbox = canvas.getBoundingClientRect();
+                let bbox = this.controlLayer.getBoundingClientRect();
                 // let x = event.clientX - bbox.left*(canvas.width/bbox.width);
                 // let y = event.clientY - bbox.top*(canvas.height/bbox.height);
-                let x = event.offsetX * (canvas.width / bbox.width);
-                let y = event.offsetY * (canvas.height / bbox.height);
+                let x = event.offsetX * (this.controlLayer.width / bbox.width);
+                let y = event.offsetY * (this.controlLayer.height / bbox.height);
                 this.setCorner(x, y);
                 this.clicktimes++;
                 if (this.clicktimes === 4) {
@@ -53,7 +58,7 @@ class Canvas {
         if (this.corner.length === 4) {
             this.reset();
         }
-        let ctx = this.canvas.getContext('2d');
+        let ctx = this.gridLayer.getContext('2d');
         ctx.lineWidth = 2;
         ctx.strokeStyle = 'red';
         ctx.beginPath();
@@ -74,7 +79,7 @@ class Canvas {
     }
 
     drawCorner() {
-        let ctx = this.canvas.getContext('2d');
+        let ctx = this.gridLayer.getContext('2d');
         ctx.lineWidth = 2;
         ctx.strokeStyle = 'red';
         for (let i = 0; i < this.corner.length; i++) {
@@ -158,7 +163,7 @@ class Canvas {
 
     drawBroder() {
         // console.log('Draw');
-        let ctx = this.canvas.getContext('2d');
+        let ctx = this.gridLayer.getContext('2d');
         ctx.lineWidth = 1;
         ctx.strokeStyle = 'blue';
         for (let i = 1; i < 4; i++) {
@@ -175,32 +180,34 @@ class Canvas {
     }
 
     reset() {
-        // console.log('Reset');
-        let ctx = this.canvas.getContext('2d');
-        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        console.log('Reset');
+        this.layers.forEach(layer => {
+            let ctx = layer.getContext('2d');
+            ctx.clearRect(0, 0, layer.width, layer.height);
+        });
         this.corner = [];
     }
 
-    refresh() {
+    clear(layer) {
         let t = new Date().getTime();
-        const refresh_period = 20 // ms
+        const refresh_period = 20; // ms
         if (t - this.last_refresh_time > refresh_period) {
-            if (this.corner.length !== 4) return;
-            let ctx = this.canvas.getContext('2d');
-            ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            this.drawCorner();
-            this.drawBroder();
-            this.drawGrid();
-            this.drawLogo();
-            t = this.last_refresh_time
+            if (this.corner.length !== 4) return false;
+            let ctx = layer.getContext('2d');
+            ctx.clearRect(0, 0, layer.width, layer.height);
+            t = this.last_refresh_time;
+            return true;
+        }
+        else {
+            return false;
         }
     }
 
     getPos(i, j) {
-        let A = [...this.corner[0]],
-            B = [...this.corner[1]],
-            C = [...this.corner[2]],
-            D = [...this.corner[3]];
+        const A = this.corner[0],
+            B = this.corner[1],
+            C = this.corner[2],
+            D = this.corner[3];
         const v = (p1, p2) => { return [p2[0] - p1[0], p2[1] - p1[1]] };
         const mul = (p, l) => { return [p[0] * l, p[1] * l] };
         const add = (p1, p2) => { return [p1[0] + p2[0], p1[1] + p2[1]] };
@@ -211,7 +218,7 @@ class Canvas {
     }
 
     drawGrid() {
-        let ctx = this.canvas.getContext('2d');
+        let ctx = this.gridLayer.getContext('2d');
         ctx.lineWidth = 1;
         ctx.strokeStyle = 'blue';
         for (let i = 1; i < this.blockn; i++) {
@@ -231,103 +238,130 @@ class Canvas {
             ctx.stroke();
         }
         this.drawLogo();
+        this.drawHeight();
+        this.drawPlayers();
+    }
+
+    getRectSize(i, j) {
+        const A = this.corner[0],
+            B = this.corner[1],
+            C = this.corner[2],
+            D = this.corner[3];
+        const v = (p1, p2) => { return [p2[0] - p1[0], p2[1] - p1[1]] };
+        let width = ((this.blockn - i) * Math.abs(v(A, B)[0]) + i * Math.abs(v(D, C)[0])) / this.blockn / this.blockn;
+        let height = ((this.blockn - j) * Math.abs(v(A, D)[1]) + j * Math.abs(v(B, C)[1])) / this.blockn / this.blockn;
+        let a = Math.min(width, height) * 0.75;
+        return a;
     }
 
     drawLogo() {
-        let A = [...this.corner[0]],
-            B = [...this.corner[1]],
-            C = [...this.corner[2]],
-            D = [...this.corner[3]];
-        const v = (p1, p2) => { return [p2[0] - p1[0], p2[1] - p1[1]] };
-        let ctx = this.canvas.getContext('2d');
-        let a, width, height;
+        if (!this.clear(this.logoLayer)) return;
+        let ctx = this.logoLayer.getContext('2d');
 
         for (let i = 0; i < this.blockn; i++) {
-            width = parseInt(((this.blockn - i) * Math.abs(v(A, B)[0]) + i * Math.abs(v(D, C)[0])) / this.blockn / this.blockn);
             for (let j = 0; j < this.blockn; j++) {
-                let index = i * this.blockn + j
-                let coord = this.getPos(i + 0.5, j + 0.5);
-                height = parseInt(((this.blockn - j) * Math.abs(v(A, D)[1]) + j * Math.abs(v(B, C)[1])) / this.blockn / this.blockn);
-                a = Math.min(width, height) * 0.75;
+                let index = i * this.blockn + j;
+                let coord = this.getPos(i+0.5, j+0.5);
+                let a = this.getRectSize(i+0.5, j+0.5);
                 ctx.globalCompositeOperation = "destination-over";
                 let imgIndex = this.indexArray[index];
-
-                if (imgIndex !== -1) 
+                if (imgIndex !== -1)
                     ctx.drawImage(this.imageArray[imgIndex], coord[0] - a / 2, coord[1] - a / 2, a, a);
+            }
+        }
+    }
+
+    drawHeight() {
+        if (!this.clear(this.heightLayer)) return;
+        let ctx = this.heightLayer.getContext('2d');
+        for (let i = 0; i < this.blockn; i++) {
+            for (let j = 0; j < this.blockn; j++) {
+                let index = i * this.blockn + j;
                 ctx.strokeStyle = 'black';
                 ctx.lineWidth = 1;
                 ctx.fillStyle = 'red';
                 let bar = Math.max(this.heightArray[index] - 4, 0);
                 for (let k = 0; k < bar; k++) {
+                    ctx.beginPath();
                     ctx.moveTo(this.getPos(i, j + 0.25 * k)[0], this.getPos(i, j + 0.25 * k)[1]);
                     ctx.lineTo(this.getPos(i + 0.2, j + 0.25 * k)[0], this.getPos(i + 0.2, j + 0.25 * k)[1]);
                     ctx.lineTo(this.getPos(i + 0.2, j + 0.25 * (k + 1))[0], this.getPos(i + 0.2, j + 0.25 * (k + 1))[1]);
                     ctx.lineTo(this.getPos(i, j + 0.25 * (k + 1))[0], this.getPos(i, j + 0.25 * (k + 1))[1]);
+                    ctx.lineTo(this.getPos(i, j + 0.25 * k)[0], this.getPos(i, j + 0.25 * k)[1]);
                     ctx.fill();
                     ctx.stroke();
                 }
                 ctx.fillStyle = 'green';
                 bar = Math.min(this.heightArray[index], 4);
                 for (let k = 0; k < bar; k++) {
+                    ctx.beginPath();
                     ctx.moveTo(this.getPos(i + 1, j + 0.25 * k)[0], this.getPos(i + 1, j + 0.25 * k)[1]);
                     ctx.lineTo(this.getPos(i + 0.8, j + 0.25 * k)[0], this.getPos(i + 0.8, j + 0.25 * k)[1]);
                     ctx.lineTo(this.getPos(i + 0.8, j + 0.25 * (k + 1))[0], this.getPos(i + 0.8, j + 0.25 * (k + 1))[1]);
                     ctx.lineTo(this.getPos(i + 1, j + 0.25 * (k + 1))[0], this.getPos(i + 1, j + 0.25 * (k + 1))[1]);
+                    ctx.lineTo(this.getPos(i + 1, j + 0.25 * k)[0], this.getPos(i + 1, j + 0.25 * k)[1]);
                     ctx.fill();
                     ctx.stroke();
                 }
             }
         }
+    }
 
-        // 绘制玩家
+    drawPlayers() {
+        // console.log(this.playerPosition1, this.playerPosition2);
+        if (!this.clear(this.playerLayer)) return;
+        let ctx = this.playerLayer.getContext('2d');
+        function drawPlayer(canvas, player, img) {
+            let coord = canvas.getPos(player.y, player.x);
+            let size = canvas.getRectSize(player.y, player.x)
+            ctx.drawImage(canvas.imageArray[img], coord[0]-size/2, coord[1]-size/2, size, size);
+        }
         if (this.playerPosition1 && this.playerPosition2) {
-            width = parseInt(((this.blockn - this.playerPosition1.y) * Math.abs(v(A, B)[0]) + this.playerPosition1.y * Math.abs(v(D, C)[0])) / this.blockn / this.blockn);
-            height = parseInt(((this.blockn - this.playerPosition1.x) * Math.abs(v(A, B)[0]) + this.playerPosition1.y * Math.abs(v(D, C)[0])) / this.blockn / this.blockn);
-            a = Math.min(width, height) * 0.75;
-            let player1Coord = this.getPos(this.playerPosition1.y, this.playerPosition1.x);
-            ctx.drawImage(this.imageArray[3], player1Coord[0] - a / 2, player1Coord[1] - a / 2, a, a);
-
-            width = parseInt(((this.blockn - this.playerPosition2.y) * Math.abs(v(A, B)[0]) + this.playerPosition2.y * Math.abs(v(D, C)[0])) / this.blockn / this.blockn);
-            height = parseInt(((this.blockn - this.playerPosition2.x) * Math.abs(v(A, B)[0]) + this.playerPosition2.y * Math.abs(v(D, C)[0])) / this.blockn / this.blockn);
-            let player2Coord = this.getPos(this.playerPosition2.y, this.playerPosition2.x);
-            a = Math.min(width, height) * 0.75;
-            ctx.drawImage(this.imageArray[4], player2Coord[0] - a / 2, player2Coord[1] - a / 2, a, a);
+            drawPlayer(this, this.playerPosition1, 3);
+            drawPlayer(this, this.playerPosition2, 4);
         }
     }
 }
 
-const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, chunks, homePosition1, playerPosition1, homePosition2, playerPosition2 }) => {
-    const canvasRef = useRef(null);
+const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, chunks, homePosition1, playerPosition1, homePosition2, playerPosition2}) => {
+    const gridLayerRef = useRef(null);
+    const logoLayerRef = useRef(null);
+    const heightLayerRef = useRef(null);
+    const playerLayerRef = useRef(null);
+    const controlLayerRef = useRef(null);
 
-    let num = 8;
+    let blockn = 8;
     let width = 600;
+    let height = width * 0.75;
+
     let imageArray = [];
     let loadNum = 0;
     let srcArray = ["assets/iron_ingot.png", "assets/gold_ingot.png", "assets/diamond.png", "assets/steve.png", "assets/alex.png", "assets/red_bed.png", "assets/blue_bed.png"];
     let imageNum = srcArray.length;
 
-    //const indexArrayRef = useRef([...Array(num * num)].map(() => -1));
-    //const heightArrayRef = useRef([...Array(num * num)].map(() => 0));
-    //if (playerPosition1 != null)
-      //  console.log("player1:", playerPosition1.x, playerPosition1.y);
+    const indexArrayRef = useRef([...Array(blockn * blockn)].map(() => -1));
+    const heightArrayRef = useRef([...Array(blockn * blockn)].map(() => 0));
 
     const gridCanvas = useRef(null);
     const tmpload = () => {
         loadNum += 1;
         if (loadNum === imageNum) {
             gridCanvas.current = new Canvas(
-                canvasRef.current,
-                width, width * 0.75, 'c1',
-                num,
+                gridLayerRef.current,
+                logoLayerRef.current,
+                heightLayerRef.current,
+                playerLayerRef.current,
+                controlLayerRef.current,
+                width, height, blockn,
                 imageArray,
-                [...Array(num * num)].map(() => -1),
-                [...Array(num * num)].map(() => 0),
+                [...Array(blockn * blockn)].map(() => -1),
+                [...Array(blockn * blockn)].map(() => 0),
                 finishCalibrateCallback,
-                playerPosition1,
-                playerPosition2
+                undefined, undefined
             );
         }
     }
+
     useEffect(
         () => {
             for (let i = 0; i < imageNum; i++) {
@@ -338,46 +372,49 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, chunks, homeP
             }
         }, []
     );
+
     useEffect(
         () => {
             if (gridCanvas.current) {
-                let indexArray = gridCanvas.current.indexArray;
+                let indexArray = indexArrayRef.current;
                 indexArray.fill(-1);
                 mines.forEach(mine => {
                     let x = parseInt(mine.position.x);
                     let y = parseInt(mine.position.y);
                     if (mine.oreType === 1)
-                        indexArray[y * num + x] = 0;
+                        indexArray[y * blockn + x] = 0;
                     else if (mine.oreType === 0)
-                        indexArray[y * num + x] = 1;
+                        indexArray[y * blockn + x] = 1;
                     else if (mine.oreType === 2)
-                        indexArray[y * num + x] = 2;
+                        indexArray[y * blockn + x] = 2;
                 });
+                indexArray[parseInt(homePosition1.y) * blockn + parseInt(homePosition1.x)] = 5;
+                indexArray[parseInt(homePosition2.y) * blockn + parseInt(homePosition2.x)] = 6;
+                if (!(indexArrayRef.current.every((v, i) => v === gridCanvas.current.indexArray[i]))) {
+                    indexArrayRef.current.forEach((v, i) => gridCanvas.current.indexArray[i] = v);
+                    gridCanvas.current.drawLogo();
+                }
 
-                indexArray[parseInt(homePosition1.y) * num + parseInt(homePosition1.x)] = 5;
-                indexArray[parseInt(homePosition2.y) * num + parseInt(homePosition2.x)] = 6;
-                //indexArray[parseInt(playerPosition1.y) * num + parseInt(playerPosition1.x)] = 3;
-                //indexArray[parseInt(playerPosition2.y) * num + parseInt(playerPosition2.x)] = 4;
-                gridCanvas.current.playerPosition1 = playerPosition1;
-                gridCanvas.current.playerPosition2 = playerPosition2;
+                let heightArray = heightArrayRef.current;
+                chunks.forEach(chunk => {
+                    heightArray[chunk.position.y * blockn + chunk.position.x] = chunk.height;
+                    // heightArray[chunk.position.y * blockn + chunk.position.x] = parseInt(Math.random()*8);
+                });
+                if (!(heightArrayRef.current.every((v, i) => v === gridCanvas.current.heightArray[i]))) {
+                    heightArrayRef.current.forEach((v, i) => gridCanvas.current.heightArray[i] = v);
+                    gridCanvas.current.drawHeight();
+                }
 
-                gridCanvas.current.refresh();
+                if (gridCanvas.current.playerPosition1 !== playerPosition1
+                    || gridCanvas.current.playerPosition2 !== playerPosition2) {
+                    console.log("Draw players");
+                    gridCanvas.current.playerPosition1 = {...playerPosition1};
+                    gridCanvas.current.playerPosition2 = {...playerPosition2};
+                    gridCanvas.current.drawPlayers();
+                }
             }
         },
         [mines]
-    );
-    useEffect(
-        () => {
-            if (gridCanvas.current) {
-                let heightArray = gridCanvas.current.heightArray;
-                chunks.forEach(chunk => {
-                    heightArray[chunk.position.y * num + chunk.position.x] = chunk.height;
-                    // heightArray[chunk.position.y * num + chunk.position.x] = parseInt(Math.random()*8);
-                });
-                gridCanvas.current.refresh();
-            }
-        },
-        [chunks]
     );
 
     useEffect(
@@ -390,7 +427,13 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, chunks, homeP
     );
 
     return (
-        <canvas ref={canvasRef} className='grid-canvas' />
+        <>
+            <canvas ref={gridLayerRef} className='grid-canvas grid-layer' />
+            <canvas ref={logoLayerRef} className='grid-canvas logo-layer' />
+            <canvas ref={heightLayerRef} className='grid-canvas height-layer' />
+            <canvas ref={playerLayerRef} className='grid-canvas player-layer' />
+            <canvas ref={controlLayerRef} className='grid-canvas control-layer' />
+        </>
     )
 }
 
