@@ -570,7 +570,7 @@ const App = () => {
               />
               : <></>}
           </div>
-          <div class='grid-canvas'>
+          <div class='grid-canvas-container'>
             <GridCanvas
               calibrating={calibrating}
               finishCalibrateCallback={finishCalibrate1}
@@ -593,7 +593,7 @@ const App = () => {
               />
               : <></>}
           </div>
-          <div class='grid-canvas'>
+          <div class='grid-canvas-container'>
             <GridCanvas
               calibrating={calibrating}
               finishCalibrateCallback={finishCalibrate2}
