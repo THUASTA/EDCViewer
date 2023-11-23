@@ -38,6 +38,7 @@ class Canvas {
 
         this.corner = [];
 
+        this.last_refresh_time = new Date().getTime();
     }
 
     state = {
@@ -181,13 +182,18 @@ class Canvas {
     }
 
     refresh() {
-        if (this.corner.length !== 4) return;
-        let ctx = this.canvas.getContext('2d');
-        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.drawCorner();
-        this.drawBroder();
-        this.drawGrid();
-        this.drawLogo();
+        let t = new Date().getTime();
+        const refresh_period = 20 // ms
+        if (t - this.last_refresh_time > refresh_period) {
+            if (this.corner.length !== 4) return;
+            let ctx = this.canvas.getContext('2d');
+            ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.drawCorner();
+            this.drawBroder();
+            this.drawGrid();
+            this.drawLogo();
+            t = this.last_refresh_time
+        }
     }
 
     getPos(i, j) {
@@ -246,18 +252,8 @@ class Canvas {
                 ctx.globalCompositeOperation = "destination-over";
                 let imgIndex = this.indexArray[index];
 
-                if (imgIndex !== -1) {
-                    if (imgIndex !== 3 || imgIndex !== 4) {
-                        ctx.drawImage(this.imageArray[imgIndex], coord[0] - a / 2, coord[1] - a / 2, a, a);
-                    }
-                    else if (imgIndex === 3) {
-                        ctx.drawImage(this.imageArray[3], this.playerPosition1.x - a / 2, this.playerPosition1.y - a / 2, a, a);
-                        console.log("playerPosition1: ", this.playerPosition1.x - a / 2, this.playerPosition1.y - a / 2);
-                    }
-                    else if (imgIndex === 4) {
-                        ctx.drawImage(this.imageArray[4], this.playerPosition2.x - a / 2, this.playerPosition2.y - a / 2, a, a);
-                    }
-                }
+                if (imgIndex !== -1) 
+                    ctx.drawImage(this.imageArray[imgIndex], coord[0] - a / 2, coord[1] - a / 2, a, a);
                 ctx.strokeStyle = 'black';
                 ctx.lineWidth = 1;
                 ctx.fillStyle = 'red';
@@ -282,6 +278,21 @@ class Canvas {
                 }
             }
         }
+
+        // 绘制玩家
+        if (this.playerPosition1 && this.playerPosition2) {
+            width = parseInt(((this.blockn - this.playerPosition1.y) * Math.abs(v(A, B)[0]) + this.playerPosition1.y * Math.abs(v(D, C)[0])) / this.blockn / this.blockn);
+            height = parseInt(((this.blockn - this.playerPosition1.x) * Math.abs(v(A, B)[0]) + this.playerPosition1.y * Math.abs(v(D, C)[0])) / this.blockn / this.blockn);
+            a = Math.min(width, height) * 0.75;
+            let player1Coord = this.getPos(this.playerPosition1.y, this.playerPosition1.x);
+            ctx.drawImage(this.imageArray[3], player1Coord[0] - a / 2, player1Coord[1] - a / 2, a, a);
+
+            width = parseInt(((this.blockn - this.playerPosition2.y) * Math.abs(v(A, B)[0]) + this.playerPosition2.y * Math.abs(v(D, C)[0])) / this.blockn / this.blockn);
+            height = parseInt(((this.blockn - this.playerPosition2.x) * Math.abs(v(A, B)[0]) + this.playerPosition2.y * Math.abs(v(D, C)[0])) / this.blockn / this.blockn);
+            let player2Coord = this.getPos(this.playerPosition2.y, this.playerPosition2.x);
+            a = Math.min(width, height) * 0.75;
+            ctx.drawImage(this.imageArray[4], player2Coord[0] - a / 2, player2Coord[1] - a / 2, a, a);
+        }
     }
 }
 
@@ -295,10 +306,10 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, chunks, homeP
     let srcArray = ["assets/iron_ingot.png", "assets/gold_ingot.png", "assets/diamond.png", "assets/steve.png", "assets/alex.png", "assets/red_bed.png", "assets/blue_bed.png"];
     let imageNum = srcArray.length;
 
-    const indexArrayRef = useRef([...Array(num * num)].map(() => -1));
-    const heightArrayRef = useRef([...Array(num * num)].map(() => 0));
-    if (playerPosition1 != null)
-        console.log("player1:", playerPosition1.x, playerPosition1.y);
+    //const indexArrayRef = useRef([...Array(num * num)].map(() => -1));
+    //const heightArrayRef = useRef([...Array(num * num)].map(() => 0));
+    //if (playerPosition1 != null)
+      //  console.log("player1:", playerPosition1.x, playerPosition1.y);
 
     const gridCanvas = useRef(null);
     const tmpload = () => {
@@ -330,7 +341,7 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, chunks, homeP
     useEffect(
         () => {
             if (gridCanvas.current) {
-                let indexArray = indexArrayRef.current;
+                let indexArray = gridCanvas.current.indexArray;
                 indexArray.fill(-1);
                 mines.forEach(mine => {
                     let x = parseInt(mine.position.x);
@@ -345,13 +356,12 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, chunks, homeP
 
                 indexArray[parseInt(homePosition1.y) * num + parseInt(homePosition1.x)] = 5;
                 indexArray[parseInt(homePosition2.y) * num + parseInt(homePosition2.x)] = 6;
-                indexArray[parseInt(playerPosition1.y) * num + parseInt(playerPosition1.x)] = 3;
-                indexArray[parseInt(playerPosition2.y) * num + parseInt(playerPosition2.x)] = 4;
+                //indexArray[parseInt(playerPosition1.y) * num + parseInt(playerPosition1.x)] = 3;
+                //indexArray[parseInt(playerPosition2.y) * num + parseInt(playerPosition2.x)] = 4;
+                gridCanvas.current.playerPosition1 = playerPosition1;
+                gridCanvas.current.playerPosition2 = playerPosition2;
 
-                if (!(indexArrayRef.current.every((v, i) => v === gridCanvas.current.indexArray[i]))) {
-                    gridCanvas.current.refresh();
-                    indexArrayRef.current.forEach((v, i) => gridCanvas.current.indexArray[i] = v);
-                }
+                gridCanvas.current.refresh();
             }
         },
         [mines]
@@ -359,15 +369,12 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, chunks, homeP
     useEffect(
         () => {
             if (gridCanvas.current) {
-                let heightArray = heightArrayRef.current;
+                let heightArray = gridCanvas.current.heightArray;
                 chunks.forEach(chunk => {
                     heightArray[chunk.position.y * num + chunk.position.x] = chunk.height;
                     // heightArray[chunk.position.y * num + chunk.position.x] = parseInt(Math.random()*8);
                 });
-                if (!(heightArrayRef.current.every((v, i) => v === gridCanvas.current.heightArray[i]))) {
-                    gridCanvas.current.refresh();
-                    heightArrayRef.current.forEach((v, i) => gridCanvas.current.heightArray[i] = v);
-                }
+                gridCanvas.current.refresh();
             }
         },
         [chunks]

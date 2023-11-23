@@ -14,6 +14,9 @@ var calibrated2 = false;
 var coord1 = [];
 var coord2 = [];
 
+let position1 = { x: 2, y: 2 };
+let position2 = { x: 5, y: 5 };
+
 const App = () => {
   var gameState = "STANDBY";
   const [camera1, setCamera1] = useState(null);
@@ -271,33 +274,33 @@ const App = () => {
             setCamera1(data.cameras.find((value) => value.cameraId === player1Camera));
             setCamera2(data.cameras.find((value) => value.cameraId === player2Camera));
             
-            let position1 = { x: 0, y: 0 };
-            let position2 = { x: 0, y: 0 };
-
-            if (player1)
-              position1 = player1.position;
-            if (player2)
-              position2 = player2.position;
-            
-            let p1 = data.players.find((value) => value.playerId === 0);
-            let p2 = data.players.find((value) => value.playerId === 1);
-            
             // 测试代码
             // 生成随机玩家坐标
             let timestamp = new Date().getTime();
             let need_regenerate_player_coord = (timestamp % 100 === 0);
             
+            let invalid = (x) => x < 0 || x > 8;
+            let rand_step = (x) => {
+              let rand_step;
+              do {
+                rand_step = Math.random() * 0.5 - 0.25;
+              } while (invalid(x + rand_step));
+              return rand_step;
+            };
+
             if (need_regenerate_player_coord) {
-              p1.position.x = Math.random() * 8;
-              p1.position.y = Math.random() * 8;
-              p2.position.x = Math.random() * 8;
-              p2.position.y = Math.random() * 8;
+              position1.x += rand_step(position1.x);
+              position1.y += rand_step(position1.y);
+              position2.x += rand_step(position2.x);
+              position2.y += rand_step(position2.y);
             }
-            else {
-              p1.position = position1;
-              p2.position = position2;
-            }
-            
+
+            let p1 = data.players.find((value) => value.playerId === 0);
+            let p2 = data.players.find((value) => value.playerId === 1);
+
+            p1.position = position1;
+            p2.position = position2;
+                        
             setPlayer1(p1);
             setPlayer2(p2);            
             
