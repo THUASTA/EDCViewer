@@ -1,6 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import './GridCanvas.css'
 
+let playerPosition1All = null;
+let playerPosition2All = null;
+
+
 class Canvas {
     constructor(gridLayer, logoLayer, heightLayer, playerLayer, controlLayer,
         width, height, blockn,

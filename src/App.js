@@ -274,38 +274,38 @@ const App = () => {
             setCamera1(data.cameras.find((value) => value.cameraId === player1Camera));
             setCamera2(data.cameras.find((value) => value.cameraId === player2Camera));
             
-            // 测试代码
-            // 生成随机玩家坐标
-            let timestamp = new Date().getTime();
-            let need_regenerate_player_coord = (timestamp % 100 === 0);
-            need_regenerate_player_coord = true;
+            // // 测试代码
+            // // 生成随机玩家坐标
+            // let timestamp = new Date().getTime();
+            // let need_regenerate_player_coord = (timestamp % 100 === 0);
+            // need_regenerate_player_coord = true;
             
-            let invalid = (x) => x < 0 || x > 8;
-            let rand_step = (x) => {
-              let rand_step;
-              do {
-                rand_step = Math.random() * 0.1 - 0.05;
-              } while (invalid(x + rand_step));
-              return rand_step;
-            };
+            // let invalid = (x) => x < 0 || x > 8;
+            // let rand_step = (x) => {
+            //   let rand_step;
+            //   do {
+            //     rand_step = Math.random() * 0.1 - 0.05;
+            //   } while (invalid(x + rand_step));
+            //   return rand_step;
+            // };
 
-            if (need_regenerate_player_coord) {
-              position1.x += rand_step(position1.x);
-              position1.y += rand_step(position1.y);
-              position2.x += rand_step(position2.x);
-              position2.y += rand_step(position2.y);
-              console.log("Random");
-            }
+            // if (need_regenerate_player_coord) {
+            //   position1.x += rand_step(position1.x);
+            //   position1.y += rand_step(position1.y);
+            //   position2.x += rand_step(position2.x);
+            //   position2.y += rand_step(position2.y);
+            //   console.log("Random");
+            // }
 
             let p1 = data.players.find((value) => value.playerId === 0);
             let p2 = data.players.find((value) => value.playerId === 1);
 
-            p1.position = position1;
-            p2.position = position2;
+            // p1.position = position1;
+            // p2.position = position2;
                         
             setPlayer1(p1);
             setPlayer2(p2);
-            console.log("Generate" , position1, position2);
+            // console.log("Generate" , position1, position2);
             setMines(data.mines);
             setChunks(data.chunks);
           }
