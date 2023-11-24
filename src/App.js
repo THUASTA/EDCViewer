@@ -271,13 +271,13 @@ const App = () => {
           if (data.messageType === 'COMPETITION_UPDATE') {
             setCamera1(data.cameras.find((value) => value.cameraId === player1Camera));
             setCamera2(data.cameras.find((value) => value.cameraId === player2Camera));
-            
+
             // // 测试代码
             // // 生成随机玩家坐标
             // let timestamp = new Date().getTime();
             // let need_regenerate_player_coord = (timestamp % 100 === 0);
             // need_regenerate_player_coord = true;
-            
+
             // let invalid = (x) => x < 0 || x > 8;
             // let rand_step = (x) => {
             //   let rand_step;
@@ -300,7 +300,7 @@ const App = () => {
 
             // p1.position = position1;
             // p2.position = position2;
-                        
+
             setPlayer1(p1);
             setPlayer2(p2);
             // console.log("Generate" , position1, position2);
@@ -312,7 +312,8 @@ const App = () => {
             console.log(data);
             const ports = document.getElementsByClassName("port-select");
             const cameras = document.getElementsByClassName("camera-select");
-            // 假设data.availableCameras是一个包含摄像头信息的数组
+      const bauds = document.getElementsByClassName("baudRate");
+      // 假设data.availableCameras是一个包含摄像头信息的数组
             const newCameras = data.availableCameras;
             const newPorts = data.availableSerialPorts;
             // 遍历每个 "port-select" 元素
@@ -333,7 +334,6 @@ const App = () => {
               });
 
               // 如果需要，你还可以设置默认值
-              // port.value = newPorts[0].id; // 假设选择第一个摄像头作为默认值
             });
 
             // 遍历每个 "port-select" 元素
@@ -368,6 +368,10 @@ const App = () => {
               showMask1 = data.players[0].camera.recognition.showMask;
               player1Camera = data.players[0].camera.cameraId;
             }
+              if(data.players[0].serialPort!==undefined){
+                ports[0].value = data.players[0].serialPort.portName; 
+                bauds[0].value= data.players[0].serialPort.baudRate;
+              }
 
             let hueCenter2 = 0, hueRange2 = 0, saturationCenter2 = 0, saturationRange2 = 0, valueCenter2 = 0, valueRange2 = 0, area2 = 0, showMask2 = false;
             if (data.players[1].camera !== undefined) {
@@ -381,6 +385,11 @@ const App = () => {
               showMask2 = data.players[1].camera.recognition.showMask;
               player2Camera = data.players[1].camera.cameraId;
             }
+            if(data.players[1].serialPort!==undefined){
+              ports[1].value = data.players[1].serialPort.portName; 
+              bauds[1].value= data.players[1].serialPort.baudRate;
+            }
+
 
             const inputs = document.getElementsByClassName("color-value");
             inputs[0].value = hueCenter1;
