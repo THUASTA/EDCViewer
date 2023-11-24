@@ -13,10 +13,10 @@ var calibrated2 = false;
 
 var coord1 = [];
 var coord2 = [];
-
-
+var gameState = "STANDBY";
+const STAGES = ["READY", "RUNNING", "BATTLING", "FINISHED", "ENDED"];
 const App = () => {
-  var gameState = "STANDBY";
+
   const [camera1, setCamera1] = useState(null);
   const [camera2, setCamera2] = useState(null);
   const [player1, setPlayer1] = useState(null);
@@ -25,7 +25,8 @@ const App = () => {
   const [chunks, setChunks] = useState([]);
   const [ipAddress, setIPAddress] = useState('');
   const [isOpen, setIsOpen] = useState(true);
-
+  const [stage, setStage] = useState(STAGES[0]);
+  const [ticks, setTicks] = useState(0);
 
 
   var player1Camera = -1;
@@ -271,7 +272,14 @@ const App = () => {
           if (data.messageType === 'COMPETITION_UPDATE') {
             setCamera1(data.cameras.find((value) => value.cameraId === player1Camera));
             setCamera2(data.cameras.find((value) => value.cameraId === player2Camera));
-
+            setStage(STAGES[Number(data.info.stage)]);
+            setTicks(data.info.elapsedTicks);
+            if (data.info.stage === 0) {
+              gameState = "STANDBY";
+            }
+            else if (data.info.stage === 4) {
+              gameState = "ENDED";
+            }
             // // 测试代码
             // // 生成随机玩家坐标
             // let timestamp = new Date().getTime();
@@ -312,8 +320,8 @@ const App = () => {
             console.log(data);
             const ports = document.getElementsByClassName("port-select");
             const cameras = document.getElementsByClassName("camera-select");
-      const bauds = document.getElementsByClassName("baudRate");
-      // 假设data.availableCameras是一个包含摄像头信息的数组
+            const bauds = document.getElementsByClassName("baudRate");
+            // 假设data.availableCameras是一个包含摄像头信息的数组
             const newCameras = data.availableCameras;
             const newPorts = data.availableSerialPorts;
             // 遍历每个 "port-select" 元素
@@ -368,10 +376,10 @@ const App = () => {
               showMask1 = data.players[0].camera.recognition.showMask;
               player1Camera = data.players[0].camera.cameraId;
             }
-              if(data.players[0].serialPort!==undefined){
-                ports[0].value = data.players[0].serialPort.portName; 
-                bauds[0].value= data.players[0].serialPort.baudRate;
-              }
+            if (data.players[0].serialPort !== undefined) {
+              ports[0].value = data.players[0].serialPort.portName;
+              bauds[0].value = data.players[0].serialPort.baudRate;
+            }
 
             let hueCenter2 = 0, hueRange2 = 0, saturationCenter2 = 0, saturationRange2 = 0, valueCenter2 = 0, valueRange2 = 0, area2 = 0, showMask2 = false;
             if (data.players[1].camera !== undefined) {
@@ -385,9 +393,9 @@ const App = () => {
               showMask2 = data.players[1].camera.recognition.showMask;
               player2Camera = data.players[1].camera.cameraId;
             }
-            if(data.players[1].serialPort!==undefined){
-              ports[1].value = data.players[1].serialPort.portName; 
-              bauds[1].value= data.players[1].serialPort.baudRate;
+            if (data.players[1].serialPort !== undefined) {
+              ports[1].value = data.players[1].serialPort.portName;
+              bauds[1].value = data.players[1].serialPort.baudRate;
             }
 
 
@@ -521,6 +529,10 @@ const App = () => {
           </div>
         )}
       </>
+      <div class='game-info-container'>
+        <div>Stage: {stage}</div>
+        <div>Ticks: {ticks}</div>
+      </div>
       <div class='top'>
         <div class='control-buttons-container'>
           <div class='control-buttons-row'>
