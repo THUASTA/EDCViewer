@@ -381,9 +381,9 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, chunks, homeP
                 mines.forEach(mine => {
                     let x = parseInt(mine.position.x);
                     let y = parseInt(mine.position.y);
-                    if (mine.oreType === 1)
+                    if (mine.oreType === 0)
                         indexArray[y * blockn + x] = 0;
-                    else if (mine.oreType === 0)
+                    else if (mine.oreType === 1)
                         indexArray[y * blockn + x] = 1;
                     else if (mine.oreType === 2)
                         indexArray[y * blockn + x] = 2;
