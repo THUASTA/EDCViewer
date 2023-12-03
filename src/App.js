@@ -71,14 +71,31 @@ const App = () => {
       const baud = document.getElementsByClassName("baudRate");
       const baudrate1 = Number(baud[0].value);
       const baudrate2 = Number(baud[1].value);
+      const cameraSettings = document.getElementsByClassName("camera-setting");
+      const cameraBrightness1 = nullOrDefault(parseInt(cameraSettings[0].value), 0);
+      const cameraContrast1 = nullOrDefault(parseInt(cameraSettings[1].value), 0);
+      const cameraSaturation1 = nullOrDefault(parseInt(cameraSettings[2].value), 0);
+      const cameraExposure1 = nullOrDefault(parseInt(cameraSettings[3].value), 0);
+      const cameraAutoExplosure1 = nullOrDefault(parseInt(cameraSettings[4].value), 0);
+      const cameraBrightness2 = nullOrDefault(parseInt(cameraSettings[5].value), 0);
+      const cameraContrast2 = nullOrDefault(parseInt(cameraSettings[6].value), 0);
+      const cameraSaturation2 = nullOrDefault(parseInt(cameraSettings[7].value), 0);
+      const cameraExposure2 = nullOrDefault(parseInt(cameraSettings[8].value), 0);
+      const cameraAutoExplosure2 = nullOrDefault(parseInt(cameraSettings[9].value), 0);
       const data1 = {
         messageType: "HOST_CONFIGURATION_FROM_CLIENT",
         token: "",
-        players: [
-          {
-            playerId: 0,
-            camera: camera1 === null ? undefined : {
+        configuration: {
+          cameras: [
+            camera1 === null ? undefined : {
               cameraId: camera1,
+              properties: {
+                Brightness: cameraBrightness1,
+                Contrast: cameraContrast1,
+                Saturation: cameraSaturation1,
+                Exposure: cameraExposure1,
+                autoExplosure: cameraAutoExplosure1
+              },
               recognition: {
                 hueCenter: hueCenter1,
                 hueRange: hueRange1,
@@ -90,15 +107,15 @@ const App = () => {
                 showMask: mask1
               }
             },
-            serialPort: port1 === "" ? undefined : {
-              portName: port1,
-              baudRate: baudrate1
-            }
-          },
-          {
-            playerId: 1,
-            camera: camera2 === null ? undefined : {
+            camera2 === null ? undefined : {
               cameraId: camera2,
+              properties: {
+                Brightness: cameraBrightness2,
+                Contrast: cameraContrast2,
+                Saturation: cameraSaturation2,
+                Exposure: cameraExposure2,
+                autoExplosure: cameraAutoExplosure2
+              },
               recognition: {
                 hueCenter: hueCenter2,
                 hueRange: hueRange2,
@@ -109,14 +126,31 @@ const App = () => {
                 minArea: area2,
                 showMask: mask2
               }
+            }
+          ],
+          players: [
+            {
+              playerId: 0,
+              camera: camera1 === null ? undefined : camera1,
+              serialPort: port1 === "" ? undefined : port1
             },
-            serialPort: port2 === "" ? undefined : {
+            {
+              playerId: 1,
+              camera: camera2 === null ? undefined : camera2,
+              serialPort: port2 === "" ? undefined : port2
+            }
+          ],
+          serialPorts: [
+            port1 === "" ? undefined : {
+              portName: port1,
+              baudRate: baudrate1
+            },
+            port2 === "" ? undefined : {
               portName: port2,
               baudRate: baudrate2
             }
-
-          }
-        ]
+          ]
+        }
       }
       player1Camera = camera1;
       player2Camera = camera2;
@@ -157,16 +191,43 @@ const App = () => {
       const baud = document.getElementsByClassName("baudRate");
       const baudrate1 = Number(baud[0].value);
       const baudrate2 = Number(baud[1].value);
+      const cameraSettings = document.getElementsByClassName("camera-setting");
+      const cameraBrightness1 = nullOrDefault(parseInt(cameraSettings[0].value), 0);
+      const cameraContrast1 = nullOrDefault(parseInt(cameraSettings[1].value), 0);
+      const cameraSaturation1 = nullOrDefault(parseInt(cameraSettings[2].value), 0);
+      const cameraExposure1 = nullOrDefault(parseInt(cameraSettings[3].value), 0);
+      const cameraAutoExplosure1 = nullOrDefault(parseInt(cameraSettings[4].value), 0);
+      const cameraBrightness2 = nullOrDefault(parseInt(cameraSettings[5].value), 0);
+      const cameraContrast2 = nullOrDefault(parseInt(cameraSettings[6].value), 0);
+      const cameraSaturation2 = nullOrDefault(parseInt(cameraSettings[7].value), 0);
+      const cameraExposure2 = nullOrDefault(parseInt(cameraSettings[8].value), 0);
+      const cameraAutoExplosure2 = nullOrDefault(parseInt(cameraSettings[9].value), 0);
       const corner1 = coord1;
       const corner2 = coord2;
       const data2 = {
         messageType: "HOST_CONFIGURATION_FROM_CLIENT",
         token: "",
-        players: [
-          {
-            playerId: 0,
-            camera: camera1 === null ? undefined : {
+        configuration: {
+          cameras: [
+            camera1 === null ? undefined : {
               cameraId: camera1,
+              properties: {
+                Brightness: cameraBrightness1,
+                Contrast: cameraContrast1,
+                Saturation: cameraSaturation1,
+                Exposure: cameraExposure1,
+                autoExplosure: cameraAutoExplosure1
+              },
+              recognition: {
+                hueCenter: hueCenter1,
+                hueRange: hueRange1,
+                saturationCenter: saturationCenter1,
+                saturationRange: saturationRange1,
+                valueCenter: valueCenter1,
+                valueRange: valueRange1,
+                minArea: area1,
+                showMask: mask1
+              },
               calibration: {
                 topLeft: {
                   x: corner1[0][0],
@@ -184,27 +245,27 @@ const App = () => {
                   x: corner1[2][0],
                   y: corner1[2][1]
                 }
-              },
-              recognition: {
-                hueCenter: hueCenter1,
-                hueRange: hueRange1,
-                saturationCenter: saturationCenter1,
-                saturationRange: saturationRange1,
-                valueCenter: valueCenter1,
-                valueRange: valueRange1,
-                minArea: area1,
-                showMask: mask1
               }
             },
-            serialPort: port1 === "" ? undefined : {
-              portName: port1,
-              baudRate: baudrate1
-            }
-          },
-          {
-            playerId: 1,
-            camera: camera2 === null ? undefined : {
+            camera2 === null ? undefined : {
               cameraId: camera2,
+              properties: {
+                Brightness: cameraBrightness2,
+                Contrast: cameraContrast2,
+                Saturation: cameraSaturation2,
+                Exposure: cameraExposure2,
+                autoExplosure: cameraAutoExplosure2
+              },
+              recognition: {
+                hueCenter: hueCenter2,
+                hueRange: hueRange2,
+                saturationCenter: saturationCenter2,
+                saturationRange: saturationRange2,
+                valueCenter: valueCenter2,
+                valueRange: valueRange2,
+                minArea: area2,
+                showMask: mask2
+              },
               calibration: {
                 topLeft: {
                   x: corner2[0][0],
@@ -223,23 +284,31 @@ const App = () => {
                   y: corner2[2][1]
                 }
               },
-              recognition: {
-                hueCenter: hueCenter2,
-                hueRange: hueRange2,
-                saturationCenter: saturationCenter2,
-                saturationRange: saturationRange2,
-                valueCenter: valueCenter2,
-                valueRange: valueRange2,
-                minArea: area2,
-                showMask: mask2
-              }
+            }
+          ],
+          players: [
+            {
+              playerId: 0,
+              camera: camera1 === null ? undefined : camera1,
+              serialPort: port1 === "" ? undefined : port1
             },
-            serialPort: port2 === "" ? undefined : {
+            {
+              playerId: 1,
+              camera: camera2 === null ? undefined : camera2,
+              serialPort: port2 === "" ? undefined : port2
+            }
+          ],
+          serialPorts: [
+            port1 === "" ? undefined : {
+              portName: port1,
+              baudRate: baudrate1
+            },
+            port2 === "" ? undefined : {
               portName: port2,
               baudRate: baudrate2
             }
-          }
-        ]
+          ]
+        }
       }
       player1Camera = camera1;
       player2Camera = camera2;
@@ -280,34 +349,9 @@ const App = () => {
             else if (data.info.stage === 4) {
               gameState = "ENDED";
             }
-            // // 测试代码
-            // // 生成随机玩家坐标
-            // let timestamp = new Date().getTime();
-            // let need_regenerate_player_coord = (timestamp % 100 === 0);
-            // need_regenerate_player_coord = true;
-
-            // let invalid = (x) => x < 0 || x > 8;
-            // let rand_step = (x) => {
-            //   let rand_step;
-            //   do {
-            //     rand_step = Math.random() * 0.1 - 0.05;
-            //   } while (invalid(x + rand_step));
-            //   return rand_step;
-            // };
-
-            // if (need_regenerate_player_coord) {
-            //   position1.x += rand_step(position1.x);
-            //   position1.y += rand_step(position1.y);
-            //   position2.x += rand_step(position2.x);
-            //   position2.y += rand_step(position2.y);
-            //   console.log("Random");
-            // }
 
             let p1 = data.players.find((value) => value.playerId === 0);
             let p2 = data.players.find((value) => value.playerId === 1);
-
-            // p1.position = position1;
-            // p2.position = position2;
 
             setPlayer1(p1);
             setPlayer2(p2);
@@ -363,64 +407,98 @@ const App = () => {
               // 如果需要，你还可以设置默认值
               // port.value = newPorts[0].id; // 假设选择第一个摄像头作为默认值
             });
-            let hueCenter1 = 0, hueRange1 = 0, saturationCenter1 = 0, saturationRange1 = 0, valueCenter1 = 0, valueRange1 = 0, area1 = 0, showMask1 = false;
+            let hueCenter = [0, 0], hueRange = [0, 0], saturationCenter = [0, 0], saturationRange = [0, 0], valueCenter = [0, 0], valueRange = [0, 0], area = [0, 0], showMask = [false, false];
+            let cameraContrast = [0, 0], cameraSaturation = [0, 0], cameraAutoExplosure = [0, 0], cameraExposure = [0, 0], cameraBrightness = [0, 0];
+            for (var i = 0; i <= 1; i++) {
+              const cameraIndex = data.configuration.players[i].camera;
+              if (data.configuration.cameras[cameraIndex] !== undefined) {
+                hueCenter[i] = data.configuration.cameras[cameraIndex].recognition.hueCenter;
+                hueRange[i] = data.configuration.cameras[cameraIndex].recognition.hueRange;
+                saturationCenter[i] = data.configuration.cameras[cameraIndex].recognition.saturationCenter;
+                saturationRange[i] = data.configuration.cameras[cameraIndex].recognition.saturationRange;
+                valueCenter[i] = data.configuration.cameras[cameraIndex].recognition.valueCenter;
+                valueRange[i] = data.configuration.cameras[cameraIndex].recognition.valueRange;
+                area[i] = data.configuration.cameras[cameraIndex].recognition.minArea;
+                showMask[i] = data.configuration.cameras[cameraIndex].recognition.showMask;
+                cameraBrightness[i] = data.configuration.cameras[cameraIndex].properties.cameraBrightness;
+                cameraContrast[i] = data.configuration.cameras[cameraIndex].properties.cameraContrast;
+                cameraSaturation[i] = data.configuration.cameras[cameraIndex].properties.cameraSaturation;
+                cameraExposure[i] = data.configuration.cameras[cameraIndex].properties.cameraExposure;
+                cameraAutoExplosure[i] = data.configuration.cameras[cameraIndex].properties.cameraAutoExplosure;
 
-            if (data.players[0].camera !== undefined) {
-              hueCenter1 = data.players[0].camera.recognition.hueCenter;
-              hueRange1 = data.players[0].camera.recognition.hueRange;
-              saturationCenter1 = data.players[0].camera.recognition.saturationCenter;
-              saturationRange1 = data.players[0].camera.recognition.saturationRange;
-              valueCenter1 = data.players[0].camera.recognition.valueCenter;
-              valueRange1 = data.players[0].camera.recognition.valueRange;
-              area1 = data.players[0].camera.recognition.minArea;
-              showMask1 = data.players[0].camera.recognition.showMask;
-              player1Camera = data.players[0].camera.cameraId;
+              }
+              const serialPortIndex = data.configuration.players[i].serialPort;
+              if (data.configuration.serialPorts[serialPortIndex] !== undefined) {
+                ports[i].value = data.configuration.serialPorts[serialPortIndex].portName;
+                bauds[i].value = data.configuration.serialPorts[serialPortIndex].baudRate;
+              }
             }
-            if (data.players[0].serialPort !== undefined) {
-              ports[0].value = data.players[0].serialPort.portName;
-              bauds[0].value = data.players[0].serialPort.baudRate;
-            }
+            // if (data.players[0].camera !== undefined) {
+            //   hueCenter1 = data.players[0].camera.recognition.hueCenter;
+            //   hueRange1 = data.players[0].camera.recognition.hueRange;
+            //   saturationCenter1 = data.players[0].camera.recognition.saturationCenter;
+            //   saturationRange1 = data.players[0].camera.recognition.saturationRange;
+            //   valueCenter1 = data.players[0].camera.recognition.valueCenter;
+            //   valueRange1 = data.players[0].camera.recognition.valueRange;
+            //   area1 = data.players[0].camera.recognition.minArea;
+            //   showMask1 = data.players[0].camera.recognition.showMask;
+            //   player1Camera = data.players[0].camera.cameraId;
+            // }
+            // if (data.players[0].serialPort !== undefined) {
+            //   ports[0].value = data.players[0].serialPort.portName;
+            //   bauds[0].value = data.players[0].serialPort.baudRate;
+            // }
 
-            let hueCenter2 = 0, hueRange2 = 0, saturationCenter2 = 0, saturationRange2 = 0, valueCenter2 = 0, valueRange2 = 0, area2 = 0, showMask2 = false;
-            if (data.players[1].camera !== undefined) {
-              hueCenter2 = data.players[1].camera.recognition.hueCenter;
-              hueRange2 = data.players[1].camera.recognition.hueRange;
-              saturationCenter2 = data.players[1].camera.recognition.saturationCenter;
-              saturationRange2 = data.players[1].camera.recognition.saturationRange;
-              valueCenter2 = data.players[1].camera.recognition.valueCenter;
-              valueRange2 = data.players[1].camera.recognition.valueRange;
-              area2 = data.players[1].camera.recognition.minArea;
-              showMask2 = data.players[1].camera.recognition.showMask;
-              player2Camera = data.players[1].camera.cameraId;
-            }
-            if (data.players[1].serialPort !== undefined) {
-              ports[1].value = data.players[1].serialPort.portName;
-              bauds[1].value = data.players[1].serialPort.baudRate;
-            }
+            // let hueCenter2 = 0, hueRange2 = 0, saturationCenter2 = 0, saturationRange2 = 0, valueCenter2 = 0, valueRange2 = 0, area2 = 0, showMask2 = false;
+            // if (data.players[1].camera !== undefined) {
+            //   hueCenter2 = data.players[1].camera.recognition.hueCenter;
+            //   hueRange2 = data.players[1].camera.recognition.hueRange;
+            //   saturationCenter2 = data.players[1].camera.recognition.saturationCenter;
+            //   saturationRange2 = data.players[1].camera.recognition.saturationRange;
+            //   valueCenter2 = data.players[1].camera.recognition.valueCenter;
+            //   valueRange2 = data.players[1].camera.recognition.valueRange;
+            //   area2 = data.players[1].camera.recognition.minArea;
+            //   showMask2 = data.players[1].camera.recognition.showMask;
+            //   player2Camera = data.players[1].camera.cameraId;
+            // }
+            // if (data.players[1].serialPort !== undefined) {
+            //   ports[1].value = data.players[1].serialPort.portName;
+            //   bauds[1].value = data.players[1].serialPort.baudRate;
+            // }
 
 
             const inputs = document.getElementsByClassName("color-value");
-            inputs[0].value = hueCenter1;
-            inputs[1].value = hueRange1;
-            inputs[2].value = saturationCenter1;
-            inputs[3].value = saturationRange1;
-            inputs[4].value = valueCenter1;
-            inputs[5].value = valueRange1;
-            inputs[6].value = hueCenter2;
-            inputs[7].value = hueRange2;
-            inputs[8].value = saturationCenter2;
-            inputs[9].value = saturationRange2;
-            inputs[10].value = valueCenter2;
-            inputs[11].value = valueRange2;
-            const areas = document.getElementsByClassName("area");
-            areas[0].value = area1;
-            areas[1].value = area2;
+            inputs[0].value = hueCenter[0];
+            inputs[1].value = hueRange[0];
+            inputs[2].value = saturationCenter[0];
+            inputs[3].value = saturationRange[0];
+            inputs[4].value = valueCenter[0];
+            inputs[5].value = valueRange[0];
+            inputs[6].value = hueCenter[1];
+            inputs[7].value = hueRange[1];
+            inputs[8].value = saturationCenter[1];
+            inputs[9].value = saturationRange[1];
+            inputs[10].value = valueCenter[1];
+            inputs[11].value = valueRange[1];
+            const Areas = document.getElementsByClassName("area");
+            Areas[0].value = area[0];
+            Areas[1].value = area[1];
             const masks = document.getElementsByClassName("show-mask");
-            masks[0].checked = showMask1;
-            masks[1].checked = showMask2;
+            masks[0].checked = showMask[0];
+            masks[1].checked = showMask[1];
             // 如果需要，你还可以设置默认值
             // port.value = newPorts[0].id; // 假设选择第一个摄像头作为默认值
-
+            const cameraSettings = document.getElementsByClassName("camera-setting");
+            cameraSettings[0].value = cameraBrightness[0];
+            cameraSettings[1].value = cameraContrast[0];
+            cameraSettings[2].value = cameraSaturation[0];
+            cameraSettings[3].value = cameraExposure[0];
+            cameraSettings[4].value = cameraAutoExplosure[0];
+            cameraSettings[5].value = cameraBrightness[1];
+            cameraSettings[6].value = cameraContrast[1];
+            cameraSettings[7].value = cameraSaturation[1];
+            cameraSettings[8].value = cameraExposure[1];
+            cameraSettings[9].value = cameraAutoExplosure[1];
             // 更新player1Camera和player2Camera
           };
         };
@@ -434,9 +512,7 @@ const App = () => {
         const setting = document.getElementById("setting");
         const canvas = document.getElementById("canvas");
         setting.onclick = async () => {
-
           ws.send(JSON.stringify({ messageType: "COMPETITION_CONTROL_COMMAND", command: "GET_HOST_CONFIGURATION", token: "" }));
-
           setTimeout(() => {
             const confirm = document.getElementById("confirmbutton");
             confirm.onclick = () => {
@@ -449,7 +525,7 @@ const App = () => {
                 console.log('send data1');
               }
             }
-          }, 1000)
+          }, 5000)
 
         }
 
