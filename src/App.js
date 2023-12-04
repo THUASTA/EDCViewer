@@ -468,37 +468,37 @@ const App = () => {
 
 
             const inputs = document.getElementsByClassName("color-value");
-            inputs[0].value = hueCenter[0];
-            inputs[1].value = hueRange[0];
-            inputs[2].value = saturationCenter[0];
-            inputs[3].value = saturationRange[0];
-            inputs[4].value = valueCenter[0];
-            inputs[5].value = valueRange[0];
-            inputs[6].value = hueCenter[1];
-            inputs[7].value = hueRange[1];
-            inputs[8].value = saturationCenter[1];
-            inputs[9].value = saturationRange[1];
-            inputs[10].value = valueCenter[1];
-            inputs[11].value = valueRange[1];
+            inputs[0].value = nullOrDefault(hueCenter[0], 0);
+            inputs[1].value = nullOrDefault(hueRange[0], 0);
+            inputs[2].value = nullOrDefault(saturationCenter[0], 0);
+            inputs[3].value = nullOrDefault(saturationRange[0], 0);
+            inputs[4].value = nullOrDefault(valueCenter[0], 0);
+            inputs[5].value = nullOrDefault(valueRange[0], 0);
+            inputs[6].value = nullOrDefault(hueCenter[1], 0);
+            inputs[7].value = nullOrDefault(hueRange[1], 0);
+            inputs[8].value = nullOrDefault(saturationCenter[1], 0);
+            inputs[9].value = nullOrDefault(saturationRange[1], 0);
+            inputs[10].value = nullOrDefault(valueCenter[1], 0);
+            inputs[11].value = nullOrDefault(valueRange[1], 0);
             const Areas = document.getElementsByClassName("area");
-            Areas[0].value = area[0];
-            Areas[1].value = area[1];
+            Areas[0].value = nullOrDefault(area[0], 0);
+            Areas[1].value = nullOrDefault(area[1], 0);
             const masks = document.getElementsByClassName("show-mask");
-            masks[0].checked = showMask[0];
-            masks[1].checked = showMask[1];
+            masks[0].checked = nullOrDefault(showMask[0], false);
+            masks[1].checked = nullOrDefault(showMask[1], false);
             // 如果需要，你还可以设置默认值
             // port.value = newPorts[0].id; // 假设选择第一个摄像头作为默认值
             const cameraSettings = document.getElementsByClassName("camera-setting");
-            cameraSettings[0].value = cameraBrightness[0];
-            cameraSettings[1].value = cameraContrast[0];
-            cameraSettings[2].value = cameraSaturation[0];
-            cameraSettings[3].value = cameraExposure[0];
-            cameraSettings[4].value = cameraAutoExplosure[0];
-            cameraSettings[5].value = cameraBrightness[1];
-            cameraSettings[6].value = cameraContrast[1];
-            cameraSettings[7].value = cameraSaturation[1];
-            cameraSettings[8].value = cameraExposure[1];
-            cameraSettings[9].value = cameraAutoExplosure[1];
+            cameraSettings[0].value = nullOrDefault(cameraBrightness[0], 0);
+            cameraSettings[1].value = nullOrDefault(cameraContrast[0], 0);
+            cameraSettings[2].value = nullOrDefault(cameraSaturation[0], 0);
+            cameraSettings[3].value = nullOrDefault(cameraExposure[0], 0);
+            cameraSettings[4].value = nullOrDefault(cameraAutoExplosure[0], 0);
+            cameraSettings[5].value = nullOrDefault(cameraBrightness[1], 0);
+            cameraSettings[6].value = nullOrDefault(cameraContrast[1], 0);
+            cameraSettings[7].value = nullOrDefault(cameraSaturation[1], 0);
+            cameraSettings[8].value = nullOrDefault(cameraExposure[1], 0);
+            cameraSettings[9].value = nullOrDefault(cameraAutoExplosure[1], 0);
             // 更新player1Camera和player2Camera
           };
         };
