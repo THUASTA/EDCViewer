@@ -7,8 +7,8 @@ const SettingsItem = ({ title }) => {
     const [saturation, setSatuarion] = useState({ center: undefined, range: undefined });
     const [value, setValue] = useState({ center: undefined, range: undefined });
     const [minArea, setMinArea] = useState(undefined);
-    const [camera, SetCamera] = useState('0');
-    const [port, setPort] = useState('COM9');
+    const [camera, SetCamera] = useState('');
+    const [port, setPort] = useState('');
     const [showMask, setShowMask] = useState(false);
     const [baudRate, setBaudRate] = useState('115200');
     const [cameraContrast, setCameraContrast] = useState(undefined);

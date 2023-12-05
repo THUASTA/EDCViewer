@@ -127,7 +127,7 @@ const App = () => {
                 showMask: mask2
               }
             }
-          ],
+          ].filter(x => x !== undefined),
           players: [
             {
               playerId: 0,
@@ -149,11 +149,14 @@ const App = () => {
               portName: port2,
               baudRate: baudrate2
             }
-          ]
+          ].filter(x => x !== undefined)
         }
       }
       player1Camera = camera1;
       player2Camera = camera2;
+      data1.configuration.cameras = data1.configuration.cameras.filter(camera => camera !== undefined);
+      data1.configuration.serialPorts = data1.configuration.serialPorts.filter(serialPort => serialPort !== undefined);
+
       console.log(data1);
       return data1;
     }
@@ -180,8 +183,8 @@ const App = () => {
       const area1 = nullOrDefault(parseInt(areas[0].value), 0);
       const area2 = nullOrDefault(parseInt(areas[1].value), 0);
       const cameras = document.getElementsByClassName("camera-select");
-      const camera1 = cameras[0].value === "" ? null : Number(cameras[0].value);
-      const camera2 = cameras[1].value === "" ? null : Number(cameras[1].value);
+      const camera1 = cameras[0].value === "" ? undefined : Number(cameras[0].value);
+      const camera2 = cameras[1].value === "" ? undefined : Number(cameras[1].value);
       const ports = document.getElementsByClassName("port-select");
       const port1 = ports[0].value;
       const port2 = ports[1].value;
@@ -285,7 +288,7 @@ const App = () => {
                 }
               },
             }
-          ],
+          ].filter(x => x !== undefined),
           players: [
             {
               playerId: 0,
@@ -307,9 +310,10 @@ const App = () => {
               portName: port2,
               baudRate: baudrate2
             }
-          ]
+          ].filter(x => x !== undefined)
         }
       }
+
       player1Camera = camera1;
       player2Camera = camera2;
 
@@ -336,7 +340,9 @@ const App = () => {
 
         ws.onmessage = (event) => {
           const data = JSON.parse(event.data);
-
+          if (data.messageType === 'ERROR') {
+            console.log(data);
+          }
           // about the data format, see https://thuasta.github.io/EDCHost/api/viewer/
           if (data.messageType === 'COMPETITION_UPDATE') {
             setCamera1(data.cameras.find((value) => value.cameraId === player1Camera));
@@ -420,11 +426,11 @@ const App = () => {
                 valueRange[i] = data.configuration.cameras[cameraIndex].recognition.valueRange;
                 area[i] = data.configuration.cameras[cameraIndex].recognition.minArea;
                 showMask[i] = data.configuration.cameras[cameraIndex].recognition.showMask;
-                cameraBrightness[i] = data.configuration.cameras[cameraIndex].properties.cameraBrightness;
-                cameraContrast[i] = data.configuration.cameras[cameraIndex].properties.cameraContrast;
-                cameraSaturation[i] = data.configuration.cameras[cameraIndex].properties.cameraSaturation;
-                cameraExposure[i] = data.configuration.cameras[cameraIndex].properties.cameraExposure;
-                cameraAutoExplosure[i] = data.configuration.cameras[cameraIndex].properties.cameraAutoExplosure;
+                cameraBrightness[i] = data.configuration.cameras[cameraIndex].properties.brightness;
+                cameraContrast[i] = data.configuration.cameras[cameraIndex].properties.contrast;
+                cameraSaturation[i] = data.configuration.cameras[cameraIndex].properties.saturation;
+                cameraExposure[i] = data.configuration.cameras[cameraIndex].properties.exposure;
+                cameraAutoExplosure[i] = data.configuration.cameras[cameraIndex].properties.autoExplosure;
 
               }
               const serialPortIndex = data.configuration.players[i].serialPort;
@@ -454,6 +460,7 @@ const App = () => {
             masks[1].checked = nullOrDefault(showMask[1], false);
             // 如果需要，你还可以设置默认值
             // port.value = newPorts[0].id; // 假设选择第一个摄像头作为默认值
+
             const cameraSettings = document.getElementsByClassName("camera-setting");
             cameraSettings[0].value = nullOrDefault(cameraBrightness[0], "");
             cameraSettings[1].value = nullOrDefault(cameraContrast[0], "");
