@@ -122,46 +122,46 @@ const SettingsItem = ({ title }) => {
                 <div class='settings-item'>
                     <span class='settings-item-label'>Camera Brightness</span>
                     <div class='settings-item-value-container'>
-                        <input type='number' class='camera-setting' placeholder='brightness'>
+                        <input type='number' class='camera-setting' placeholder='brightness'
                             value={cameraBrightness}
                             onChange={(e) => setCameraBrightness(e.target.value)}
-                        </input>
+                        />
                     </div>
                 </div>
                 <div class='settings-item'>
                     <span class='settings-item-label'>Camera Contrast</span>
                     <div class='settings-item-value-container'>
-                        <input type='number' class='camera-setting' placeholder='contrast'>
+                        <input type='number' class='camera-setting' placeholder='contrast'
                             value={cameraContrast}
                             onChange={(e) => setCameraContrast(e.target.value)}
-                        </input>
+                        />
                     </div>
                 </div>
                 <div class='settings-item'>
                     <span class='settings-item-label'>Camera Saturation</span>
                     <div class='settings-item-value-container'>
-                        <input type='number' class='camera-setting' placeholder='saturation'>
+                        <input type='number' class='camera-setting' placeholder='saturation'
                             value={cameraSaturation}
                             onChange={(e) => setCameraSaturation(e.target.value)}
-                        </input>
+                        />
                     </div>
                 </div>
                 <div class='settings-item'>
                     <span class='settings-item-label'>Camera Exposure</span>
                     <div class='settings-item-value-container'>
-                        <input type='number' class='camera-setting' placeholder='exposure'>
+                        <input type='number' class='camera-setting' placeholder='exposure'
                             value={cameraExposure}
                             onChange={(e) => setCameraExposure(e.target.value)}
-                        </input>
+                        />
                     </div>
                 </div>
                 <div class='settings-item'>
                     <span class='settings-item-label'>Camera Auto Exposure</span>
                     <div class='settings-item-value-container'>
-                        <input type='checkbox' class='camera-setting' placeholder='auto-exposure'>
+                        <input type='checkbox' class='camera-setting' placeholder='auto-exposure'
                             value={cameraAutoExposure}
                             onChange={(e) => setCameraAutoExposure(e.target.value)}
-                        </input>
+                        />
                     </div>
                 </div>
 
