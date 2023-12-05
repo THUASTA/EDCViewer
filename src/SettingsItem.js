@@ -118,9 +118,12 @@ const SettingsItem = ({ title }) => {
                         </select>
                     </div>
                 </div>
+                <div class='settings-item'>
+                <span class='settings-item-label'>Camera Paras</span>
+                </div>
 
                 <div class='settings-item'>
-                    <span class='settings-item-label'>Camera Brightness</span>
+                    <span class='settings-item-label'>Brightness</span>
                     <div class='settings-item-value-container'>
                         <input type='number' class='camera-setting' placeholder='brightness'
                             value={cameraBrightness}
@@ -129,7 +132,7 @@ const SettingsItem = ({ title }) => {
                     </div>
                 </div>
                 <div class='settings-item'>
-                    <span class='settings-item-label'>Camera Contrast</span>
+                    <span class='settings-item-label'>Contrast</span>
                     <div class='settings-item-value-container'>
                         <input type='number' class='camera-setting' placeholder='contrast'
                             value={cameraContrast}
@@ -138,7 +141,7 @@ const SettingsItem = ({ title }) => {
                     </div>
                 </div>
                 <div class='settings-item'>
-                    <span class='settings-item-label'>Camera Saturation</span>
+                    <span class='settings-item-label'>Saturation</span>
                     <div class='settings-item-value-container'>
                         <input type='number' class='camera-setting' placeholder='saturation'
                             value={cameraSaturation}
@@ -147,7 +150,7 @@ const SettingsItem = ({ title }) => {
                     </div>
                 </div>
                 <div class='settings-item'>
-                    <span class='settings-item-label'>Camera Exposure</span>
+                    <span class='settings-item-label'>Exposure</span>
                     <div class='settings-item-value-container'>
                         <input type='number' class='camera-setting' placeholder='exposure'
                             value={cameraExposure}
@@ -156,7 +159,7 @@ const SettingsItem = ({ title }) => {
                     </div>
                 </div>
                 <div class='settings-item'>
-                    <span class='settings-item-label'>Camera Auto Exposure</span>
+                    <span class='settings-item-label'>Auto Exposure</span>
                     <div class='settings-item-value-container'>
                         <input type='checkbox' class='camera-setting' placeholder='auto-exposure'
                             value={cameraAutoExposure}
