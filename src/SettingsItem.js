@@ -7,10 +7,15 @@ const SettingsItem = ({ title }) => {
     const [saturation, setSatuarion] = useState({ center: undefined, range: undefined });
     const [value, setValue] = useState({ center: undefined, range: undefined });
     const [minArea, setMinArea] = useState(undefined);
-    const [camera, SetCamera] = useState('0');
-    const [port, setPort] = useState('COM9');
+    const [camera, SetCamera] = useState('');
+    const [port, setPort] = useState('');
     const [showMask, setShowMask] = useState(false);
     const [baudRate, setBaudRate] = useState('115200');
+    const [cameraContrast, setCameraContrast] = useState(undefined);
+    const [cameraBrightness, setCameraBrightness] = useState(undefined);
+    const [cameraExposure, setCameraExposure] = useState(undefined);
+    const [cameraAutoExposure, setCameraAutoExposure] = useState(undefined);
+    const [cameraSaturation, setCameraSaturation] = useState(undefined);
     return (
 
         <div class='settings-container'>
@@ -113,6 +118,56 @@ const SettingsItem = ({ title }) => {
                         </select>
                     </div>
                 </div>
+                <div class='settings-item'>
+                <span class='settings-item-label'>Camera Paras</span>
+                </div>
+
+                <div class='settings-item'>
+                    <span class='settings-item-label'>Brightness</span>
+                    <div class='settings-item-value-container'>
+                        <input type='number' class='camera-setting' placeholder='brightness'
+                            value={cameraBrightness}
+                            onChange={(e) => setCameraBrightness(e.target.value)}
+                        />
+                    </div>
+                </div>
+                <div class='settings-item'>
+                    <span class='settings-item-label'>Contrast</span>
+                    <div class='settings-item-value-container'>
+                        <input type='number' class='camera-setting' placeholder='contrast'
+                            value={cameraContrast}
+                            onChange={(e) => setCameraContrast(e.target.value)}
+                        />
+                    </div>
+                </div>
+                <div class='settings-item'>
+                    <span class='settings-item-label'>Saturation</span>
+                    <div class='settings-item-value-container'>
+                        <input type='number' class='camera-setting' placeholder='saturation'
+                            value={cameraSaturation}
+                            onChange={(e) => setCameraSaturation(e.target.value)}
+                        />
+                    </div>
+                </div>
+                <div class='settings-item'>
+                    <span class='settings-item-label'>Exposure</span>
+                    <div class='settings-item-value-container'>
+                        <input type='number' class='camera-setting' placeholder='exposure'
+                            value={cameraExposure}
+                            onChange={(e) => setCameraExposure(e.target.value)}
+                        />
+                    </div>
+                </div>
+                <div class='settings-item'>
+                    <span class='settings-item-label'>Auto Exposure</span>
+                    <div class='settings-item-value-container'>
+                        <input type='checkbox' class='camera-setting' placeholder='auto-exposure'
+                            value={cameraAutoExposure}
+                            onChange={(e) => setCameraAutoExposure(e.target.value)}
+                        />
+                    </div>
+                </div>
+
             </div>
         </div>
     )
