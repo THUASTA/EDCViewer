@@ -72,16 +72,16 @@ const App = () => {
       const baudrate1 = Number(baud[0].value);
       const baudrate2 = Number(baud[1].value);
       const cameraSettings = document.getElementsByClassName("camera-setting");
-      const cameraBrightness1 = nullOrDefault(parseInt(cameraSettings[0].value), 0);
-      const cameraContrast1 = nullOrDefault(parseInt(cameraSettings[1].value), 0);
-      const cameraSaturation1 = nullOrDefault(parseInt(cameraSettings[2].value), 0);
-      const cameraExposure1 = nullOrDefault(parseInt(cameraSettings[3].value), 0);
-      const cameraAutoExplosure1 = nullOrDefault(parseInt(cameraSettings[4].value), 0);
-      const cameraBrightness2 = nullOrDefault(parseInt(cameraSettings[5].value), 0);
-      const cameraContrast2 = nullOrDefault(parseInt(cameraSettings[6].value), 0);
-      const cameraSaturation2 = nullOrDefault(parseInt(cameraSettings[7].value), 0);
-      const cameraExposure2 = nullOrDefault(parseInt(cameraSettings[8].value), 0);
-      const cameraAutoExplosure2 = nullOrDefault(parseInt(cameraSettings[9].value), 0);
+      const cameraBrightness1 = nullOrDefault(parseFloat(cameraSettings[0].value), 0);
+      const cameraContrast1 = nullOrDefault(parseFloat(cameraSettings[1].value), 0);
+      const cameraSaturation1 = nullOrDefault(parseFloat(cameraSettings[2].value), 0);
+      const cameraExposure1 = nullOrDefault(parseFloat(cameraSettings[3].value), 0);
+      const cameraAutoExplosure1 = nullOrDefault(parseFloat(cameraSettings[4].value), 0);
+      const cameraBrightness2 = nullOrDefault(parseFloat(cameraSettings[5].value), 0);
+      const cameraContrast2 = nullOrDefault(parseFloat(cameraSettings[6].value), 0);
+      const cameraSaturation2 = nullOrDefault(parseFloat(cameraSettings[7].value), 0);
+      const cameraExposure2 = nullOrDefault(parseFloat(cameraSettings[8].value), 0);
+      const cameraAutoExplosure2 = nullOrDefault(parseFloat(cameraSettings[9].value), 0);
       const data1 = {
         messageType: "HOST_CONFIGURATION_FROM_CLIENT",
         token: "",
@@ -90,10 +90,10 @@ const App = () => {
             camera1 === null ? undefined : {
               cameraId: camera1,
               properties: {
-                Brightness: cameraBrightness1,
-                Contrast: cameraContrast1,
-                Saturation: cameraSaturation1,
-                Exposure: cameraExposure1,
+                brightness: cameraBrightness1,
+                contrast: cameraContrast1,
+                saturation: cameraSaturation1,
+                exposure: cameraExposure1,
                 autoExplosure: cameraAutoExplosure1
               },
               recognition: {
@@ -110,10 +110,10 @@ const App = () => {
             camera2 === null ? undefined : {
               cameraId: camera2,
               properties: {
-                Brightness: cameraBrightness2,
-                Contrast: cameraContrast2,
-                Saturation: cameraSaturation2,
-                Exposure: cameraExposure2,
+                brightness: cameraBrightness2,
+                contrast: cameraContrast2,
+                saturation: cameraSaturation2,
+                exposure: cameraExposure2,
                 autoExplosure: cameraAutoExplosure2
               },
               recognition: {
@@ -180,8 +180,8 @@ const App = () => {
       const valueCenter2 = nullOrDefault(parseInt(inputs[10].value), 0);
       const valueRange2 = nullOrDefault(parseInt(inputs[11].value), 0);
       const areas = document.getElementsByClassName("area");
-      const area1 = nullOrDefault(parseInt(areas[0].value), 0);
-      const area2 = nullOrDefault(parseInt(areas[1].value), 0);
+      const area1 = nullOrDefault(parseFloat(areas[0].value), 0);
+      const area2 = nullOrDefault(parseFloat(areas[1].value), 0);
       const cameras = document.getElementsByClassName("camera-select");
       const camera1 = cameras[0].value === "" ? undefined : Number(cameras[0].value);
       const camera2 = cameras[1].value === "" ? undefined : Number(cameras[1].value);
@@ -195,16 +195,16 @@ const App = () => {
       const baudrate1 = Number(baud[0].value);
       const baudrate2 = Number(baud[1].value);
       const cameraSettings = document.getElementsByClassName("camera-setting");
-      const cameraBrightness1 = nullOrDefault(parseInt(cameraSettings[0].value), 0);
-      const cameraContrast1 = nullOrDefault(parseInt(cameraSettings[1].value), 0);
-      const cameraSaturation1 = nullOrDefault(parseInt(cameraSettings[2].value), 0);
-      const cameraExposure1 = nullOrDefault(parseInt(cameraSettings[3].value), 0);
-      const cameraAutoExplosure1 = nullOrDefault(parseInt(cameraSettings[4].value), 0);
-      const cameraBrightness2 = nullOrDefault(parseInt(cameraSettings[5].value), 0);
-      const cameraContrast2 = nullOrDefault(parseInt(cameraSettings[6].value), 0);
-      const cameraSaturation2 = nullOrDefault(parseInt(cameraSettings[7].value), 0);
-      const cameraExposure2 = nullOrDefault(parseInt(cameraSettings[8].value), 0);
-      const cameraAutoExplosure2 = nullOrDefault(parseInt(cameraSettings[9].value), 0);
+      const cameraBrightness1 = nullOrDefault(parseFloat(cameraSettings[0].value), 0);
+      const cameraContrast1 = nullOrDefault(parseFloat(cameraSettings[1].value), 0);
+      const cameraSaturation1 = nullOrDefault(parseFloat(cameraSettings[2].value), 0);
+      const cameraExposure1 = nullOrDefault(parseFloat(cameraSettings[3].value), 0);
+      const cameraAutoExplosure1 = nullOrDefault(parseFloat(cameraSettings[4].value), 0);
+      const cameraBrightness2 = nullOrDefault(parseFloat(cameraSettings[5].value), 0);
+      const cameraContrast2 = nullOrDefault(parseFloat(cameraSettings[6].value), 0);
+      const cameraSaturation2 = nullOrDefault(parseFloat(cameraSettings[7].value), 0);
+      const cameraExposure2 = nullOrDefault(parseFloat(cameraSettings[8].value), 0);
+      const cameraAutoExplosure2 = nullOrDefault(parseFloat(cameraSettings[9].value), 0);
       const corner1 = coord1;
       const corner2 = coord2;
       const data2 = {
@@ -215,10 +215,10 @@ const App = () => {
             camera1 === null ? undefined : {
               cameraId: camera1,
               properties: {
-                Brightness: cameraBrightness1,
-                Contrast: cameraContrast1,
-                Saturation: cameraSaturation1,
-                Exposure: cameraExposure1,
+                brightness: cameraBrightness1,
+                contrast: cameraContrast1,
+                saturation: cameraSaturation1,
+                exposure: cameraExposure1,
                 autoExplosure: cameraAutoExplosure1
               },
               recognition: {
@@ -253,10 +253,10 @@ const App = () => {
             camera2 === null ? undefined : {
               cameraId: camera2,
               properties: {
-                Brightness: cameraBrightness2,
-                Contrast: cameraContrast2,
-                Saturation: cameraSaturation2,
-                Exposure: cameraExposure2,
+                brightness: cameraBrightness2,
+                contrast: cameraContrast2,
+                saturation: cameraSaturation2,
+                exposure: cameraExposure2,
                 autoExplosure: cameraAutoExplosure2
               },
               recognition: {
