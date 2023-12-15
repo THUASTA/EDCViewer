@@ -331,7 +331,8 @@ const GridCanvas = ({ calibrating, finishCalibrateCallback, mines, chunks, homeP
     const controlLayerRef = useRef(null);
 
     let blockn = 8;
-    let width = 600;
+    // let width = 600;
+    let width = 640;
     let height = width * 0.75;
 
     let imageArray = [];
